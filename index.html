@@ -669,9 +669,6 @@ function App() {
         @media (prefers-reduced-motion: reduce){ .fade,.sheet,.lift,.row,.ghost{ animation:none!important; transition:none!important;} }
       `),
         React.createElement("div", { style: { width: "100%", maxWidth: 480, height: "100%", background: C.cream, position: "relative", overflow: "hidden", display: "flex", flexDirection: "column" } },
-            React.createElement("div", { style: { height: 36, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 22px", position: "absolute", top: 0, left: 0, right: 0, zIndex: 5 } },
-                React.createElement("span", { style: { fontFamily: FONT.b, fontWeight: 700, fontSize: 13, color: C.cream } }, "8:20"),
-                React.createElement("span", { style: { fontFamily: FONT.m, fontSize: 11, color: C.cream } }, "5G \u25BE 84%")),
             me ? React.createElement(MainApp, { me: me }) : React.createElement(AuthFlow, { onDone: setMe }))));
 }
 
