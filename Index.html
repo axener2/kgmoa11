@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light" />
+<title>KGMOA — Member Portal</title>
+<meta name="description" content="KGMOA member portal — registration, verification, and the member app." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Hanken+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- React + ReactDOM (UMD, production) -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+<!-- Lucide icons (vanilla build — supplies the icon path data used by the small Icon wrapper below) -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<style>
+  html { color-scheme: light; }
+  html, body { margin: 0; padding: 0; height: 100%; background: #EEF1F5; }
+  #root { height: 100%; }
+  #boot-fallback {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: system-ui, sans-serif; color: #5E6B79; font-size: 13px; letter-spacing: .04em;
+    background: #EEF1F5; padding: 24px; text-align: center; box-sizing: border-box;
+  }
+</style>
+</head>
+<body>
+<div id="root"><div id="boot-fallback">Loading KGMOA…</div></div>
+
+<!-- Pre-compiled from JSX with esbuild — the browser runs plain JavaScript, no in-page transpiling. -->
+<script>
+try {
+const { useState, useRef, useEffect } = React;
+function renderIconNode(node, key) {
+  if (!node) return null;
+  const [tag, attrs, children] = node;
+  return React.createElement(tag, { key, ...attrs }, (children || []).map((c, i) => renderIconNode(c, i)));
+}
+function Icon({ name, size = 18, color = "currentColor", strokeWidth = 2, style, className, ...rest }) {
+  const node = window.lucide && window.lucide.icons && window.lucide.icons[name];
+  if (!node) return null;
+  const children = node[2];
+  return /* @__PURE__ */ React.createElement(
+    "svg",
+    {
+      xmlns: "http://www.w3.org/2000/svg",
+      width: size,
+      height: size,
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: color,
+      strokeWidth,
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      style,
+      className,
+      ...rest
+    },
+    (children || []).map((c, i) => renderIconNode(c, i))
+  );
+}
+function makeIcon(name) {
+  return function IconComponent(props) {
+    return /* @__PURE__ */ React.createElement(Icon, { name, ...props });
+  };
+}
+const User = makeIcon("User");
+const Phone = makeIcon("Phone");
+const Hash = makeIcon("Hash");
+const ArrowRight = makeIcon("ArrowRight");
+const ShieldCheck = makeIcon("ShieldCheck");
+const Check = makeIcon("Check");
+const ChevronLeft = makeIcon("ChevronLeft");
+const Home = makeIcon("Home");
+const Bell = makeIcon("Bell");
+const Users = makeIcon("Users");
+const ChevronRight = makeIcon("ChevronRight");
+const Mail = makeIcon("Mail");
+const MapPin = makeIcon("MapPin");
+const Calendar = makeIcon("Calendar");
+const FileText = makeIcon("FileText");
+const Megaphone = makeIcon("Megaphone");
+const BadgeCheck = makeIcon("BadgeCheck");
+const Building2 = makeIcon("Building2");
+const Clock = makeIcon("Clock");
+const Settings = makeIcon("Settings");
+const Shield = makeIcon("Shield");
+const LifeBuoy = makeIcon("LifeBuoy");
+const LogOut = makeIcon("LogOut");
+const ArrowUpRight = makeIcon("ArrowUpRight");
+const Search = makeIcon("Search");
+const Pencil = makeIcon("Pencil");
+const Info = makeIcon("Info");
+const Stethoscope = makeIcon("Stethoscope");
+const C = {
+  navy: "#0E2B4D",
+  navy2: "#173E69",
+  navySoft: "#1E4D82",
+  acc: "#C2A14D",
+  accSoft: "#DBC189",
+  cream: "#EEF1F5",
+  paper: "#FAFBFD",
+  ink: "#14202E",
+  muted: "#5E6B79",
+  line: "rgba(14,43,77,0.10)",
+  red: "#B23B3B",
+  ok: "#3F9D6B"
+};
+const FONT = {
+  d: "'Marcellus', Georgia, serif",
+  b: "'Hanken Grotesk', system-ui, sans-serif",
+  m: "'Spline Sans Mono', ui-monospace, monospace"
+};
+const OTP_CODE = "12345";
+const DOCTORS = [
+  { pen: "768414", name: "Dr Aswathy U R", phone: "9446168886", rank: "Assistant Surgeon", institution: "PHC Peruva", speciality: "MD Anaesthesia" },
+  { pen: "494012", name: "Dr Mammen P Cherian", phone: "9496357047", rank: "Assistant Surgeon", institution: "PHC Peruva", speciality: "\u2014" },
+  { pen: "703547", name: "Dr Sreeja Raj", phone: "9446412850", rank: "Assistant Surgeon", institution: "PHC Velloor", speciality: "MD Forensic Medicine" },
+  { pen: "842312", name: "Dr Prasanth A M", phone: "9446157848", rank: "Assistant Surgeon", institution: "PHC Velloor", speciality: "MBA HM/HA" },
+  { pen: "629888", name: "Dr Sonia Scaria", phone: "9496356632", rank: "Assistant Surgeon", institution: "PHC Kattampak", speciality: "MD Community Medicine" },
+  { pen: "654017", name: "Dr Vijeesha Vijayan", phone: "9497754788", rank: "Assistant Surgeon", institution: "PHC Kattampak", speciality: "Diploma Obs & Gyn" },
+  { pen: "364986", name: "Dr Sapna G I", phone: "9400633816", rank: "Civil Surgeon", institution: "CHC Arunoottimangalam", speciality: "\u2014" },
+  { pen: "484202", name: "Dr Binasha Sreedhar", phone: "9961372368", rank: "Assistant Surgeon", institution: "CHC Arunoottimangalam", speciality: "\u2014" },
+  { pen: "891981", name: "Dr Lijomon T K", phone: "9496345552", rank: "Assistant Surgeon", institution: "CHC Arunoottimangalam", speciality: "MS Orthopaedics" },
+  { pen: "442387", name: "Dr Mini A S", phone: "9446384158", rank: "Civil Surgeon", institution: "PHC Athirampuzha", speciality: "\u2014" },
+  { pen: "732231", name: "Dr Nissi K J", phone: "9496131906", rank: "Assistant Surgeon", institution: "PHC Athirampuzha", speciality: "MD Pharmacology" },
+  { pen: "795893", name: "Dr Asha Sukumaran", phone: "9074144039", rank: "Assistant Surgeon", institution: "PHC Athirampuzha", speciality: "MD Paediatrics" },
+  { pen: "859234", name: "Dr Jabin Jose", phone: "7736125269", rank: "Assistant Surgeon", institution: "PHC Athirampuzha", speciality: "\u2014" },
+  { pen: "704808", name: "Dr Vineetha T S", phone: "9496565370", rank: "Assistant Surgeon", institution: "PHC Aymanam", speciality: "\u2014" },
+  { pen: "693128", name: "Dr Anush S Kudakasseril", phone: "9446265764", rank: "Assistant Surgeon", institution: "PHC Aymanam", speciality: "MD Paediatrics" },
+  { pen: "997006", name: "Dr Harshith S", phone: "9400000000", rank: "Assistant Surgeon", institution: "PHC Aymanam", speciality: "\u2014" },
+  { pen: "935628", name: "Dr Sherin Maria Augustain", phone: "9495910955", rank: "Assistant Surgeon", institution: "PHC Onamthuruthu", speciality: "MS ENT" },
+  { pen: "587322", name: "Dr Linto Lazar", phone: "9447766689", rank: "Assistant Surgeon", institution: "PHC Onamthuruthu", speciality: "\u2014" }
+];
+const UPDATES = [
+  { type: "Circular", title: "DA arrears \u2014 third installment release", meta: "GO(Rt) No. 2148/2026/Fin", date: "12 Jun 2026", unread: true },
+  { type: "Event", title: "Annual Conference 2026", meta: "02 Aug \xB7 Registration open", date: "11 Jun 2026", unread: true },
+  { type: "Circular", title: "Revised transfer & posting norms, 2026", meta: "GO(P) No. 87/2026/H&FWD", date: "09 Jun 2026", unread: false },
+  { type: "Welfare", title: "Medical welfare fund \u2014 new claim portal live", meta: "Claims now filed online", date: "06 Jun 2026", unread: false },
+  { type: "Circular", title: "Pay revision arrears \u2014 option submission", meta: "Last date 30 Jun 2026", date: "02 Jun 2026", unread: false }
+];
+const TYPE_COLOR = {
+  Circular: { bg: "rgba(14,43,77,0.07)", fg: C.navy },
+  Event: { bg: "rgba(30,77,130,0.12)", fg: "#1E4D82" },
+  Welfare: { bg: "rgba(178,59,59,0.10)", fg: C.red }
+};
+const initialsOf = (name) => {
+  var _a, _b;
+  const clean = name.replace(/^Dr\.?\s*/i, "").trim().split(/\s+/);
+  return ((((_a = clean[0]) == null ? void 0 : _a[0]) || "") + (((_b = clean[1]) == null ? void 0 : _b[0]) || "")).toUpperCase();
+};
+function Avatar({ name, size = 44, gold = false }) {
+  return /* @__PURE__ */ React.createElement("div", { style: {
+    width: size,
+    height: size,
+    borderRadius: "50%",
+    flexShrink: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: FONT.d,
+    fontSize: size * 0.36,
+    letterSpacing: ".02em",
+    color: gold ? C.navy : C.cream,
+    background: gold ? "linear-gradient(150deg,#F5F7FA,#D2DBE6)" : "linear-gradient(150deg,#234E80,#0E2B4D)",
+    border: gold ? "none" : "1px solid rgba(255,255,255,0.16)"
+  } }, initialsOf(name));
+}
+function Seal({ size = 40 }) {
+  return /* @__PURE__ */ React.createElement("div", { style: { width: size, height: size, borderRadius: "50%", border: `1px solid rgba(194,161,77,0.6)`, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", flexShrink: 0 } }, /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", inset: 3, borderRadius: "50%", border: `1px solid rgba(194,161,77,0.35)` } }), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.d, fontSize: size * 0.34, color: C.accSoft, letterSpacing: ".04em" } }, "KG"));
+}
+function Label({ children, color = C.muted }) {
+  return /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 10.5, letterSpacing: ".16em", textTransform: "uppercase", color } }, children);
+}
+function Field({ icon: Icon2, label, value, onChange, placeholder, error, type = "text", inputMode }) {
+  return /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 10, letterSpacing: ".12em", textTransform: "uppercase", color: C.muted, marginBottom: 7 } }, label), /* @__PURE__ */ React.createElement("div", { className: "field", style: { display: "flex", alignItems: "center", gap: 10, background: C.paper, border: `1px solid ${error ? C.red : C.line}`, borderRadius: 12, padding: "12px 13px" } }, /* @__PURE__ */ React.createElement(Icon2, { size: 16, color: error ? C.red : C.navySoft, style: { flexShrink: 0 } }), /* @__PURE__ */ React.createElement(
+    "input",
+    {
+      value,
+      onChange,
+      placeholder,
+      type,
+      inputMode,
+      style: { border: "none", outline: "none", background: "transparent", flex: 1, fontFamily: FONT.b, fontSize: 14.5, color: C.ink, minWidth: 0 }
+    }
+  )), error && /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 11.5, color: C.red, marginTop: 5 } }, error));
+}
+function PrimaryBtn({ children, onClick, icon: Icon2 }) {
+  return /* @__PURE__ */ React.createElement("button", { onClick, className: "lift", style: {
+    width: "100%",
+    padding: "15px 0",
+    borderRadius: 13,
+    border: "none",
+    cursor: "pointer",
+    background: "linear-gradient(160deg,#173E69,#0E2B4D)",
+    color: C.cream,
+    fontFamily: FONT.b,
+    fontSize: 15,
+    fontWeight: 600,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    boxShadow: "0 14px 26px -14px rgba(14,43,77,0.8)"
+  } }, children, Icon2 && /* @__PURE__ */ React.createElement(Icon2, { size: 17 }));
+}
+function BrandPanel() {
+  return /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(165deg,#173E69,#0E2B4D)", padding: "44px 24px 28px", position: "relative", borderBottomLeftRadius: 26, borderBottomRightRadius: 26 } }, /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", top: 0, left: 24, right: 24, height: 1, background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.32),transparent)" } }), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", gap: 12 } }, /* @__PURE__ */ React.createElement(Seal, { size: 40 }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 23, color: C.cream, letterSpacing: ".14em", lineHeight: 1 } }, "KGMOA"), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 8, letterSpacing: ".16em", color: C.accSoft, marginTop: 5 } }, "MEMBER PORTAL"))), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 11.5, color: "rgba(238,241,245,0.6)", marginTop: 12, textAlign: "center" } }, "Kerala Govt. Medical Officers' Association"));
+}
+function RegisterStep({ onNext }) {
+  const [f, setF] = useState({ name: "", pen: "", phone: "" });
+  const [err, setErr] = useState({});
+  const [rejected, setRejected] = useState(false);
+  const set = (k) => (e) => {
+    setF((s) => ({ ...s, [k]: e.target.value }));
+    setRejected(false);
+  };
+  const submit = () => {
+    const e = {};
+    const pen = f.pen.trim();
+    const phoneDigits = f.phone.replace(/\D/g, "");
+    if (!f.name.trim()) e.name = "Enter your name";
+    if (!pen) e.pen = "Enter your PEN number";
+    else if (!/^\d{4,8}$/.test(pen)) e.pen = "Enter a valid PEN number";
+    if (!phoneDigits) e.phone = "Enter your mobile number";
+    else if (!/^\d{10}$/.test(phoneDigits)) e.phone = "Enter a valid 10-digit mobile number";
+    setErr(e);
+    if (Object.keys(e).length) return;
+    const record = DOCTORS.find((d) => d.pen === pen && d.phone.replace(/\D/g, "") === phoneDigits) || null;
+    if (!record) {
+      setRejected(true);
+      return;
+    }
+    onNext(f, record);
+  };
+  return /* @__PURE__ */ React.createElement("div", { className: "fade" }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 22, color: C.ink } }, "Create your account"), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12.5, color: C.muted, marginTop: 3, marginBottom: 18 } }, "For serving government medical officers"), /* @__PURE__ */ React.createElement(Field, { icon: User, label: "Full name", value: f.name, onChange: set("name"), placeholder: "Enter your full name", error: err.name }), /* @__PURE__ */ React.createElement(Field, { icon: Hash, label: "PEN number", value: f.pen, onChange: set("pen"), placeholder: "Enter your PEN number", error: err.pen, inputMode: "numeric" }), /* @__PURE__ */ React.createElement(Field, { icon: Phone, label: "Mobile", value: f.phone, onChange: set("phone"), placeholder: "Enter your mobile number", error: err.phone, inputMode: "tel" }), rejected && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 9, alignItems: "flex-start", background: "rgba(178,59,59,0.07)", border: "1px solid rgba(178,59,59,0.25)", borderRadius: 12, padding: "11px 13px", marginBottom: 16 } }, /* @__PURE__ */ React.createElement(Info, { size: 15, color: C.red, style: { flexShrink: 0, marginTop: 1 } }), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 12.5, color: C.red, lineHeight: 1.5 } }, "Your PEN number and mobile number don't match our member records. Please check both and try again, or contact your district unit if you believe this is an error.")), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 4 } }, /* @__PURE__ */ React.createElement(PrimaryBtn, { onClick: submit, icon: ArrowRight }, "Continue")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "flex-start", gap: 8, justifyContent: "center", textAlign: "center", marginTop: 14 } }, /* @__PURE__ */ React.createElement(ShieldCheck, { size: 14, color: C.acc, style: { flexShrink: 0, marginTop: 1 } }), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 11.5, color: C.muted, lineHeight: 1.45 } }, "Only pre-approved members can register. We'll verify your PEN and mobile number against association records.")));
+}
+function OtpStep({ form, onBack, onVerified }) {
+  const [otp, setOtp] = useState(["", "", "", "", ""]);
+  const [err, setErr] = useState("");
+  const refs = useRef([]);
+  const setDigit = (i, v) => {
+    var _a;
+    if (!/^\d?$/.test(v)) return;
+    const next = [...otp];
+    next[i] = v;
+    setOtp(next);
+    setErr("");
+    if (v && i < 4) (_a = refs.current[i + 1]) == null ? void 0 : _a.focus();
+  };
+  const onKey = (i, e) => {
+    var _a;
+    if (e.key === "Backspace" && !otp[i] && i > 0) (_a = refs.current[i - 1]) == null ? void 0 : _a.focus();
+  };
+  const verify = () => {
+    if (otp.join("") === OTP_CODE) {
+      onVerified();
+    } else {
+      setErr("Incorrect code. Please try again.");
+    }
+  };
+  return /* @__PURE__ */ React.createElement("div", { className: "fade" }, /* @__PURE__ */ React.createElement("button", { onClick: onBack, className: "linkback", style: { display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", cursor: "pointer", color: C.navySoft, fontFamily: FONT.b, fontSize: 12.5, fontWeight: 600, marginBottom: 14, padding: 0 } }, /* @__PURE__ */ React.createElement(ChevronLeft, { size: 15 }), " Back"), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 22, color: C.ink } }, "Verify your mobile"), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12.5, color: C.muted, marginTop: 3, marginBottom: 20, lineHeight: 1.5 } }, "Enter the OTP sent to ", form.phone ? `+91 ${form.phone}` : "your registered mobile number", "."), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 9, justifyContent: "space-between", marginBottom: 10 } }, otp.map((d, i) => /* @__PURE__ */ React.createElement(
+    "input",
+    {
+      key: i,
+      ref: (el) => refs.current[i] = el,
+      value: d,
+      onChange: (e) => setDigit(i, e.target.value),
+      onKeyDown: (e) => onKey(i, e),
+      inputMode: "numeric",
+      maxLength: 1,
+      style: {
+        width: "100%",
+        aspectRatio: "1",
+        textAlign: "center",
+        fontFamily: FONT.d,
+        fontSize: 22,
+        color: C.ink,
+        border: `1px solid ${err ? C.red : C.line}`,
+        borderRadius: 12,
+        background: C.paper,
+        outline: "none"
+      }
+    }
+  ))), err && /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12, color: C.red, marginBottom: 10 } }, err), /* @__PURE__ */ React.createElement(PrimaryBtn, { onClick: verify, icon: ArrowRight }, "Verify"), /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", marginTop: 14, fontFamily: FONT.b, fontSize: 12, color: C.muted } }, "Didn't get a code? ", /* @__PURE__ */ React.createElement("span", { style: { color: C.navySoft, fontWeight: 600 } }, "Resend")));
+}
+function ConfirmStep({ form, record, onBack, onConfirm }) {
+  const profile = {
+    name: record.name,
+    pen: record.pen,
+    phone: record.phone,
+    rank: record.rank,
+    institution: record.institution,
+    speciality: record.speciality && record.speciality !== "\u2014" ? record.speciality : "Not on record"
+  };
+  const rows = [
+    { icon: BadgeCheck, k: "PEN number", v: profile.pen, mono: true },
+    { icon: Stethoscope, k: "Rank", v: profile.rank },
+    { icon: Building2, k: "Institution", v: profile.institution, note: "You can edit your institution later in Settings." },
+    { icon: Pencil, k: "Speciality", v: profile.speciality },
+    { icon: Phone, k: "Mobile", v: profile.phone ? `+91 ${profile.phone}` : "\u2014" }
+  ];
+  return /* @__PURE__ */ React.createElement("div", { className: "fade" }, /* @__PURE__ */ React.createElement("button", { onClick: onBack, className: "linkback", style: { display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", cursor: "pointer", color: C.navySoft, fontFamily: FONT.b, fontSize: 12.5, fontWeight: 600, marginBottom: 14, padding: 0 } }, /* @__PURE__ */ React.createElement(ChevronLeft, { size: 15 }), " Back"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 4 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 30, height: 30, borderRadius: "50%", background: "rgba(63,157,107,0.12)", display: "flex", alignItems: "center", justifyContent: "center" } }, /* @__PURE__ */ React.createElement(Check, { size: 16, color: C.ok, strokeWidth: 2.6 })), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 21, color: C.ink } }, "Confirm your details")), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12.5, color: C.muted, marginTop: 2, marginBottom: 16, lineHeight: 1.5 } }, "We found your record in the association register. Please confirm it's correct."), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 13, background: C.paper, border: `1px solid ${C.line}`, borderRadius: 14, padding: "14px 15px", marginBottom: 12 } }, /* @__PURE__ */ React.createElement(Avatar, { name: profile.name, size: 48, gold: true }), /* @__PURE__ */ React.createElement("div", { style: { minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 18, color: C.ink, lineHeight: 1.15 } }, profile.name), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12, color: C.muted, marginTop: 2 } }, profile.rank), form.name.trim().toLowerCase() !== profile.name.toLowerCase() && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 5, marginTop: 6 } }, /* @__PURE__ */ React.createElement(Info, { size: 11, color: "#8A6A22" }), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 11, color: "#8A6A22", fontStyle: "italic" } }, "Showing the name on your official record.")))), /* @__PURE__ */ React.createElement("div", { style: { background: C.paper, border: `1px solid ${C.line}`, borderRadius: 14, padding: "4px 15px", marginBottom: 18 } }, rows.map((r, i) => /* @__PURE__ */ React.createElement("div", { key: r.k, style: { display: "flex", gap: 12, padding: "12px 0", borderBottom: i === rows.length - 1 ? "none" : `1px solid ${C.line}`, alignItems: "flex-start" } }, /* @__PURE__ */ React.createElement(r.icon, { size: 16, color: C.acc, style: { marginTop: 2, flexShrink: 0 } }), /* @__PURE__ */ React.createElement("div", { style: { minWidth: 0, flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 9.5, letterSpacing: ".1em", textTransform: "uppercase", color: C.muted } }, r.k), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: r.mono ? FONT.m : FONT.b, fontSize: r.mono ? 13.5 : 14, color: C.ink, marginTop: 2 } }, r.v), r.note && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 5, marginTop: 5 } }, /* @__PURE__ */ React.createElement(Info, { size: 11, color: "#8A6A22" }), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 11, color: "#8A6A22", fontStyle: "italic" } }, r.note)))))), /* @__PURE__ */ React.createElement(PrimaryBtn, { onClick: () => onConfirm(profile), icon: ArrowRight }, "Confirm & continue"));
+}
+function AuthFlow({ onDone }) {
+  const [step, setStep] = useState("register");
+  const [form, setForm] = useState(null);
+  const [record, setRecord] = useState(null);
+  return /* @__PURE__ */ React.createElement("div", { className: "scroll", style: { flex: 1, overflowY: "auto", paddingTop: 36 } }, /* @__PURE__ */ React.createElement(BrandPanel, null), /* @__PURE__ */ React.createElement("div", { style: { padding: "0 18px 28px", marginTop: -20 } }, /* @__PURE__ */ React.createElement("div", { style: { background: C.cream, border: `1px solid ${C.line}`, borderRadius: 20, padding: 20, boxShadow: "0 20px 40px -28px rgba(14,43,77,0.5)" } }, /* @__PURE__ */ React.createElement("div", { style: { position: "relative", display: "flex", background: C.paper, border: `1px solid ${C.line}`, borderRadius: 12, padding: 4, marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { flex: 1, textAlign: "center", padding: "10px 0", fontFamily: FONT.b, fontSize: 13.5, fontWeight: 600, color: "rgba(94,107,121,0.55)" } }, "Sign in"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1, textAlign: "center", padding: "10px 0", borderRadius: 9, background: "linear-gradient(160deg,#173E69,#0E2B4D)", color: C.cream, fontFamily: FONT.b, fontSize: 13.5, fontWeight: 600 } }, "Register")), step === "register" && /* @__PURE__ */ React.createElement(RegisterStep, { onNext: (f, rec) => {
+    setForm(f);
+    setRecord(rec);
+    setStep("otp");
+  } }), step === "otp" && /* @__PURE__ */ React.createElement(OtpStep, { form, onBack: () => setStep("register"), onVerified: () => setStep("confirm") }), step === "confirm" && /* @__PURE__ */ React.createElement(ConfirmStep, { form, record, onBack: () => setStep("otp"), onConfirm: onDone })), step === "register" && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", gap: 7, marginTop: 16 } }, /* @__PURE__ */ React.createElement(ShieldCheck, { size: 13, color: C.muted }), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 11.5, color: C.muted } }, "Members-only portal \xB7 verified access"))));
+}
+function MembershipCard({ me }) {
+  return /* @__PURE__ */ React.createElement("div", { style: { position: "relative", borderRadius: 18, padding: 5, background: "linear-gradient(160deg,#173E69 0%,#0E2B4D 58%,#0A2243 100%)", boxShadow: "0 18px 38px -18px rgba(14,43,77,0.65)", overflow: "hidden" } }, /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", inset: 0, pointerEvents: "none", backgroundImage: "repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0 1.5px,transparent 1.5px 9px)" } }), /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", right: -10, bottom: -18, fontFamily: FONT.d, fontSize: 86, color: "rgba(255,255,255,0.05)", lineHeight: 1, pointerEvents: "none" } }, "KG"), /* @__PURE__ */ React.createElement("div", { style: { position: "relative", borderRadius: 14, border: "1px solid rgba(255,255,255,0.22)", boxShadow: "inset 0 0 0 4px rgba(14,43,77,0.9), inset 0 0 0 5px rgba(255,255,255,0.12)", padding: "16px 16px 14px" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 19, color: C.cream, letterSpacing: ".04em" } }, "KGMOA"), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 8.5, letterSpacing: ".18em", color: "rgba(238,241,245,0.6)", marginTop: 2 } }, "MEMBERSHIP \xB7 ESTD 1965")), /* @__PURE__ */ React.createElement(Seal, { size: 34 })), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 14, alignItems: "center", marginTop: 18 } }, /* @__PURE__ */ React.createElement(Avatar, { name: me.name, size: 52, gold: true }), /* @__PURE__ */ React.createElement("div", { style: { minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 19, color: C.cream, lineHeight: 1.1 } }, me.name), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12.5, color: "rgba(244,238,225,0.72)", marginTop: 3 } }, me.rank, " \xB7 ", me.institution))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 18, paddingTop: 13, borderTop: "1px solid rgba(255,255,255,0.16)" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 8.5, letterSpacing: ".16em", color: "rgba(244,238,225,0.5)" } }, "PEN"), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 13, color: "rgba(238,241,245,0.9)", marginTop: 3, letterSpacing: ".02em" } }, me.pen)), /* @__PURE__ */ React.createElement("div", { style: { textAlign: "right" } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 8.5, letterSpacing: ".16em", color: "rgba(244,238,225,0.5)" } }, "VALID THROUGH"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 6, justifyContent: "flex-end", marginTop: 3 } }, /* @__PURE__ */ React.createElement("span", { style: { width: 6, height: 6, borderRadius: "50%", background: "#5FC08A", boxShadow: "0 0 0 3px rgba(95,192,138,0.18)" } }), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.m, fontSize: 13, color: C.cream } }, "Mar 2027"))))));
+}
+function UpdateRow({ u }) {
+  const c = TYPE_COLOR[u.type];
+  return /* @__PURE__ */ React.createElement("div", { className: "lift", style: { borderRadius: 14, padding: "13px 15px", background: C.paper, border: `1px solid ${C.line}`, display: "flex", gap: 12, alignItems: "flex-start" } }, /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 6 } }, /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.m, fontSize: 9.5, letterSpacing: ".08em", textTransform: "uppercase", color: c.fg, background: c.bg, padding: "3px 8px", borderRadius: 100 } }, u.type), u.unread && /* @__PURE__ */ React.createElement("span", { style: { width: 6, height: 6, borderRadius: "50%", background: C.acc } })), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 14, fontWeight: 600, color: C.ink, lineHeight: 1.3 } }, u.title), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 11, color: C.muted, marginTop: 5 } }, u.date, " \xB7 ", u.meta)), /* @__PURE__ */ React.createElement(ChevronRight, { size: 17, color: C.muted, style: { marginTop: 2, flexShrink: 0 } }));
+}
+function SectionHead({ title, action, onAction }) {
+  return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 18px 12px" } }, /* @__PURE__ */ React.createElement(Label, { color: C.navySoft }, title), action && /* @__PURE__ */ React.createElement("button", { onClick: onAction, style: { background: "none", border: "none", display: "flex", alignItems: "center", gap: 3, cursor: "pointer" } }, /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 12, color: C.navySoft, fontWeight: 600 } }, action), /* @__PURE__ */ React.createElement(ArrowUpRight, { size: 13, color: C.navySoft })));
+}
+function HomeScreen({ me, go }) {
+  const quick = [
+    { icon: FileText, label: "Circulars", to: "updates" },
+    { icon: Users, label: "Directory", to: "directory" },
+    { icon: Calendar, label: "Events", to: "updates" }
+  ];
+  return /* @__PURE__ */ React.createElement("div", { className: "fade" }, /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(165deg,#173E69,#0E2B4D)", padding: "20px 20px 56px", borderBottomLeftRadius: 26, borderBottomRightRadius: 26, position: "relative" } }, /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", top: 0, left: 20, right: 20, height: 1, background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.32),transparent)" } }), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 11 } }, /* @__PURE__ */ React.createElement(Seal, { size: 40 }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 20, color: C.cream, letterSpacing: ".14em", lineHeight: 1 } }, "KGMOA"), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 8, letterSpacing: ".1em", color: "rgba(238,241,245,0.6)", marginTop: 4 } }, "MEMBER PORTAL"))), /* @__PURE__ */ React.createElement("button", { className: "ghost", "aria-label": "Notifications", style: { position: "relative", width: 38, height: 38, borderRadius: 11, border: "1px solid rgba(255,255,255,0.18)", background: "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" } }, /* @__PURE__ */ React.createElement(Bell, { size: 18, color: C.cream }), /* @__PURE__ */ React.createElement("span", { style: { position: "absolute", top: 7, right: 7, width: 7, height: 7, borderRadius: "50%", background: C.red, border: "1.5px solid #0E2B4D" } }))), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 10.5, letterSpacing: ".14em", color: "rgba(238,241,245,0.68)" } }, "\u0D28\u0D2E\u0D38\u0D4D\u0D15\u0D3E\u0D30\u0D02 \xB7 WELCOME"), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 23, color: C.cream, marginTop: 5 } }, me.name), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12.5, color: "rgba(244,238,225,0.6)", marginTop: 2 } }, me.rank))), /* @__PURE__ */ React.createElement("div", { style: { padding: "0 18px", marginTop: -38 } }, /* @__PURE__ */ React.createElement(MembershipCard, { me })), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, padding: "18px 18px 4px" } }, quick.map((q) => /* @__PURE__ */ React.createElement("button", { key: q.label, className: "lift", onClick: () => go(q.to), style: { display: "flex", flexDirection: "column", alignItems: "center", gap: 7, padding: "12px 4px", borderRadius: 14, background: C.paper, border: `1px solid ${C.line}`, cursor: "pointer" } }, /* @__PURE__ */ React.createElement("div", { style: { width: 38, height: 38, borderRadius: 11, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(14,43,77,0.05)", border: `1px solid ${C.line}` } }, /* @__PURE__ */ React.createElement(q.icon, { size: 17, color: C.navySoft })), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 11.5, color: C.ink, fontWeight: 600 } }, q.label)))), /* @__PURE__ */ React.createElement(SectionHead, { title: "Latest updates", action: "View all", onAction: () => go("updates") }), /* @__PURE__ */ React.createElement("div", { style: { padding: "0 18px", display: "flex", flexDirection: "column", gap: 10 } }, UPDATES.slice(0, 2).map((u, i) => /* @__PURE__ */ React.createElement(UpdateRow, { key: i, u }))), /* @__PURE__ */ React.createElement(SectionHead, { title: "Upcoming" }), /* @__PURE__ */ React.createElement("div", { style: { padding: "0 18px 22px" } }, /* @__PURE__ */ React.createElement("div", { className: "lift", style: { borderRadius: 16, padding: 16, background: C.paper, border: `1px solid ${C.line}`, display: "flex", gap: 14, alignItems: "center" } }, /* @__PURE__ */ React.createElement("div", { style: { width: 52, height: 56, borderRadius: 12, flexShrink: 0, background: "linear-gradient(160deg,#173E69,#0E2B4D)", color: C.cream, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" } }, /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.m, fontSize: 9, letterSpacing: ".12em", color: "rgba(238,241,245,0.7)" } }, "AUG"), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.d, fontSize: 22, lineHeight: 1 } }, "02")), /* @__PURE__ */ React.createElement("div", { style: { minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 16, color: C.ink } }, "Annual Conference 2026"), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12, color: C.muted, marginTop: 3, display: "flex", alignItems: "center", gap: 5 } }, /* @__PURE__ */ React.createElement(MapPin, { size: 12 }), " Venue to be announced \xB7 02 Aug")), /* @__PURE__ */ React.createElement(ChevronRight, { size: 18, color: C.muted, style: { marginLeft: "auto", flexShrink: 0 } }))));
+}
+function ScreenTitle({ title, sub }) {
+  return /* @__PURE__ */ React.createElement("div", { style: { padding: "22px 20px 14px" } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 27, color: C.ink } }, title), sub && /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12.5, color: C.muted, marginTop: 2 } }, sub));
+}
+function UpdatesScreen() {
+  const [filter, setFilter] = useState("All");
+  const tabs = ["All", "Circular", "Event", "Welfare"];
+  const list = filter === "All" ? UPDATES : UPDATES.filter((u) => u.type === filter);
+  return /* @__PURE__ */ React.createElement("div", { className: "fade" }, /* @__PURE__ */ React.createElement(ScreenTitle, { title: "Updates", sub: "Circulars, events & welfare notices" }), /* @__PURE__ */ React.createElement("div", { className: "noscroll", style: { display: "flex", gap: 8, padding: "0 18px 14px", overflowX: "auto" } }, tabs.map((t) => /* @__PURE__ */ React.createElement("button", { key: t, onClick: () => setFilter(t), style: chip(filter === t) }, t === "All" ? "All" : t + "s"))), /* @__PURE__ */ React.createElement("div", { style: { padding: "0 18px 22px", display: "flex", flexDirection: "column", gap: 10 } }, list.map((u, i) => /* @__PURE__ */ React.createElement(UpdateRow, { key: i, u }))));
+}
+function DirectoryScreen({ openMember }) {
+  const [q, setQ] = useState("");
+  const list = DOCTORS.filter((m) => (m.name + m.rank + m.institution).toLowerCase().includes(q.toLowerCase()));
+  return /* @__PURE__ */ React.createElement("div", { className: "fade" }, /* @__PURE__ */ React.createElement(ScreenTitle, { title: "Directory", sub: `${DOCTORS.length} members` }), /* @__PURE__ */ React.createElement("div", { style: { padding: "0 18px" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 9, background: C.paper, border: `1px solid ${C.line}`, borderRadius: 12, padding: "10px 13px" } }, /* @__PURE__ */ React.createElement(Search, { size: 16, color: C.muted }), /* @__PURE__ */ React.createElement(
+    "input",
+    {
+      value: q,
+      onChange: (e) => setQ(e.target.value),
+      placeholder: "Search name, rank, institution",
+      style: { border: "none", outline: "none", background: "transparent", flex: 1, fontFamily: FONT.b, fontSize: 13.5, color: C.ink }
+    }
+  ))), /* @__PURE__ */ React.createElement("div", { style: { padding: "10px 18px 22px", display: "flex", flexDirection: "column" } }, list.map((m, i) => /* @__PURE__ */ React.createElement("button", { key: m.pen, className: "row", onClick: () => openMember(m), style: { display: "flex", alignItems: "center", gap: 13, padding: "12px 4px", borderBottom: i === list.length - 1 ? "none" : `1px solid ${C.line}`, background: "transparent", textAlign: "left", width: "100%" } }, /* @__PURE__ */ React.createElement(Avatar, { name: m.name, size: 42 }), /* @__PURE__ */ React.createElement("div", { style: { minWidth: 0, flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 14.5, fontWeight: 600, color: C.ink } }, m.name), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12, color: C.muted, marginTop: 1 } }, m.rank, " \xB7 ", m.institution)), /* @__PURE__ */ React.createElement(ChevronRight, { size: 17, color: C.muted }))), list.length === 0 && /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "40px 0", fontFamily: FONT.b, color: C.muted, fontSize: 13.5 } }, "No members match that search.")));
+}
+function Detail({ title, rows }) {
+  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { padding: "18px 18px 0" } }, /* @__PURE__ */ React.createElement(Label, null, title)), /* @__PURE__ */ React.createElement("div", { style: { padding: "10px 18px 0", display: "flex", flexDirection: "column" } }, rows.map((r, i) => /* @__PURE__ */ React.createElement("div", { key: r.k, style: { display: "flex", gap: 13, padding: "12px 2px", alignItems: "flex-start", borderBottom: i === rows.length - 1 ? "none" : `1px solid ${C.line}` } }, /* @__PURE__ */ React.createElement(r.icon, { size: 16, color: C.acc, style: { marginTop: 2, flexShrink: 0 } }), /* @__PURE__ */ React.createElement("div", { style: { minWidth: 0, flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", color: C.muted } }, r.k), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: r.mono ? FONT.m : FONT.b, fontSize: 14, color: C.ink, marginTop: 2 } }, r.v), r.note && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 5, marginTop: 5 } }, /* @__PURE__ */ React.createElement(Info, { size: 11, color: "#8A6A22" }), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 11, color: "#8A6A22", fontStyle: "italic" } }, r.note)))))));
+}
+function ProfileView({ m, self }) {
+  const spec = m.speciality && m.speciality !== "\u2014" ? m.speciality : "Not on record";
+  return /* @__PURE__ */ React.createElement("div", { className: "fade" }, /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(165deg,#173E69,#0E2B4D)", padding: "26px 20px 30px", borderBottomLeftRadius: 26, borderBottomRightRadius: 26, position: "relative", textAlign: "center" } }, /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", top: 0, left: 20, right: 20, height: 1, background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.32),transparent)" } }), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "center", marginBottom: 12 } }, /* @__PURE__ */ React.createElement(Avatar, { name: m.name, size: 76, gold: true })), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 23, color: C.cream } }, m.name), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 13, color: "rgba(238,241,245,0.7)", marginTop: 3 } }, m.rank, " \xB7 ", m.institution), /* @__PURE__ */ React.createElement("div", { style: { display: "inline-flex", alignItems: "center", gap: 6, marginTop: 12, padding: "5px 12px", borderRadius: 100, border: "1px solid rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.08)" } }, /* @__PURE__ */ React.createElement(BadgeCheck, { size: 13, color: C.cream }), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.m, fontSize: 10.5, letterSpacing: ".1em", color: "rgba(238,241,245,0.9)" } }, "PEN ", m.pen))), /* @__PURE__ */ React.createElement(Detail, { title: "Service details", rows: [
+    { icon: Stethoscope, k: "Rank", v: m.rank },
+    { icon: Building2, k: "Institution", v: m.institution, note: self ? "You can edit your institution later in Settings." : void 0 },
+    { icon: Pencil, k: "Speciality", v: spec },
+    { icon: Hash, k: "PEN number", v: m.pen, mono: true }
+  ] }), /* @__PURE__ */ React.createElement(Detail, { title: "Contact", rows: [
+    { icon: Phone, k: "Phone", v: m.phone ? `+91 ${m.phone}` : "\u2014" },
+    { icon: Mail, k: "Email", v: `${initialsOf(m.name).toLowerCase()}.${m.pen}@kgmoa.in` }
+  ] }), self && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { padding: "18px 18px 0" } }, /* @__PURE__ */ React.createElement(Label, null, "Account")), /* @__PURE__ */ React.createElement("div", { style: { padding: "10px 18px 24px", display: "flex", flexDirection: "column" } }, [
+    { icon: Building2, t: "Edit institution & posting" },
+    { icon: Bell, t: "Notifications" },
+    { icon: Shield, t: "Privacy" },
+    { icon: LifeBuoy, t: "Help & support" },
+    { icon: LogOut, t: "Sign out", danger: true }
+  ].map((r, i, a) => /* @__PURE__ */ React.createElement("button", { key: r.t, className: "row", style: { display: "flex", alignItems: "center", gap: 13, padding: "13px 2px", borderBottom: i === a.length - 1 ? "none" : `1px solid ${C.line}`, background: "transparent", width: "100%", textAlign: "left" } }, /* @__PURE__ */ React.createElement(r.icon, { size: 17, color: r.danger ? C.red : C.navySoft }), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 14, color: r.danger ? C.red : C.ink, flex: 1 } }, r.t), !r.danger && /* @__PURE__ */ React.createElement(ChevronRight, { size: 16, color: C.muted }))))), !self && /* @__PURE__ */ React.createElement("div", { style: { padding: "14px 18px 24px", display: "flex", gap: 10 } }, /* @__PURE__ */ React.createElement("a", { href: `tel:+91${m.phone}`, className: "lift", style: { ...actionBtn, background: C.navy, color: C.cream } }, /* @__PURE__ */ React.createElement(Phone, { size: 15 }), " Call"), /* @__PURE__ */ React.createElement("a", { href: `mailto:${initialsOf(m.name).toLowerCase()}.${m.pen}@kgmoa.in`, className: "lift", style: { ...actionBtn, background: C.paper, color: C.navy, border: `1px solid ${C.line}` } }, /* @__PURE__ */ React.createElement(Mail, { size: 15 }), " Message")));
+}
+const actionBtn = { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "13px 0", borderRadius: 12, fontFamily: FONT.b, fontSize: 14, fontWeight: 600, textDecoration: "none", cursor: "pointer" };
+const chip = (active) => ({ flexShrink: 0, whiteSpace: "nowrap", padding: "7px 14px", borderRadius: 100, cursor: "pointer", fontFamily: FONT.b, fontSize: 12.5, fontWeight: 600, background: active ? C.navy : "transparent", color: active ? C.cream : C.navySoft, border: `1px solid ${active ? C.navy : C.line}` });
+function MainApp({ me }) {
+  const [tab, setTab] = useState("home");
+  const [member, setMember] = useState(null);
+  const scrollRef = useRef(null);
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, [tab, member]);
+  const NAV = [
+    { id: "home", icon: Home, label: "Home" },
+    { id: "updates", icon: Megaphone, label: "Updates" },
+    { id: "directory", icon: Users, label: "Directory" },
+    { id: "profile", icon: User, label: "Profile" }
+  ];
+  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { ref: scrollRef, className: "scroll", style: { flex: 1, overflowY: "auto", paddingTop: 36 } }, member ? /* @__PURE__ */ React.createElement("div", { className: "sheet" }, /* @__PURE__ */ React.createElement("button", { onClick: () => setMember(null), className: "ghost", style: { position: "absolute", top: 42, left: 14, zIndex: 6, width: 34, height: 34, borderRadius: 10, border: "1px solid rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" } }, /* @__PURE__ */ React.createElement(ChevronLeft, { size: 19, color: C.cream })), /* @__PURE__ */ React.createElement(ProfileView, { m: member, self: false })) : /* @__PURE__ */ React.createElement(React.Fragment, null, tab === "home" && /* @__PURE__ */ React.createElement(HomeScreen, { me, go: setTab }), tab === "updates" && /* @__PURE__ */ React.createElement(UpdatesScreen, null), tab === "directory" && /* @__PURE__ */ React.createElement(DirectoryScreen, { openMember: setMember }), tab === "profile" && /* @__PURE__ */ React.createElement(ProfileView, { m: me, self: true }))), /* @__PURE__ */ React.createElement("div", { style: { flexShrink: 0, background: C.paper, borderTop: `1px solid ${C.line}`, paddingBottom: 6 } }, /* @__PURE__ */ React.createElement("div", { style: { height: 1, background: "linear-gradient(90deg,transparent,rgba(14,43,77,0.18),transparent)" } }), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", padding: "9px 8px 4px" } }, NAV.map((n) => {
+    const active = tab === n.id && !member;
+    return /* @__PURE__ */ React.createElement("button", { key: n.id, onClick: () => {
+      setMember(null);
+      setTab(n.id);
+    }, style: { flex: 1, background: "none", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, padding: "4px 0" } }, /* @__PURE__ */ React.createElement(n.icon, { size: 21, color: active ? C.navy : C.muted, strokeWidth: active ? 2.4 : 1.8 }), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 10, fontWeight: active ? 700 : 500, color: active ? C.navy : C.muted } }, n.label), /* @__PURE__ */ React.createElement("span", { style: { width: 4, height: 4, borderRadius: "50%", background: active ? C.acc : "transparent" } }));
+  }))));
+}
+function App() {
+  const [me, setMe] = useState(null);
+  return /* @__PURE__ */ React.createElement("div", { style: { height: "100vh", width: "100%", background: C.cream, display: "flex", justifyContent: "center", overflow: "hidden" } }, /* @__PURE__ */ React.createElement("style", null, `
+        @import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Hanken+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; }
+        .fade { animation: fade .3s ease both; } @keyframes fade { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:none;} }
+        .sheet { animation: slideUp .3s cubic-bezier(.2,.8,.2,1) both; } @keyframes slideUp { from{transform:translateY(100%);} to{transform:none;} }
+        .lift { transition: transform .15s ease; } .lift:active { transform: scale(.985); }
+        .row { transition: opacity .15s ease; cursor: pointer; } .row:active { opacity: .55; }
+        .ghost { transition: background .15s ease; } .ghost:active { background: rgba(255,255,255,.14); }
+        .field:focus-within { border-color: ${C.acc} !important; box-shadow: 0 0 0 3px rgba(194,161,77,0.16); }
+        .scroll::-webkit-scrollbar { width: 0; } .scroll { scrollbar-width: none; }
+        .noscroll::-webkit-scrollbar { display: none; } .noscroll { scrollbar-width: none; }
+        input::placeholder { color: #9AA6B2; }
+        button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid ${C.acc}; outline-offset: 2px; border-radius: 8px; }
+        @media (prefers-reduced-motion: reduce){ .fade,.sheet,.lift,.row,.ghost{ animation:none!important; transition:none!important;} }
+      `), /* @__PURE__ */ React.createElement("div", { style: { width: "100%", maxWidth: 480, height: "100%", background: C.cream, position: "relative", overflow: "hidden", display: "flex", flexDirection: "column" } }, /* @__PURE__ */ React.createElement("div", { style: { height: 36, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 22px", position: "absolute", top: 0, left: 0, right: 0, zIndex: 5 } }, /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.b, fontWeight: 700, fontSize: 13, color: C.cream } }, "8:20"), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: FONT.m, fontSize: 11, color: C.cream } }, "5G \u25BE 84%")), me ? /* @__PURE__ */ React.createElement(MainApp, { me }) : /* @__PURE__ */ React.createElement(AuthFlow, { onDone: setMe })));
+}
+const _root = ReactDOM.createRoot(document.getElementById("root"));
+_root.render(/* @__PURE__ */ React.createElement(App, null));
+
+} catch (err) {
+  document.getElementById("root").innerHTML =
+    '<div id="boot-fallback">Something went wrong loading the app.<br/><br/>' +
+    '<span style="font-family:monospace;font-size:11px;opacity:.8">' + (err && err.message ? err.message : err) + '</span></div>';
+  console.error(err);
+}
+</script>
+</body>
+</html>
