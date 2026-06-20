@@ -1,71 +1,683 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>KGMOA — Member Portal</title>
-<meta name="description" content="KGMOA member portal demo: registration, OTP verification, member card, updates and directory.">
-<style>
-:root{--navy:#0E2B4D;--navy2:#173E69;--blue:#1E4D82;--gold:#C2A14D;--cream:#EEF1F5;--paper:#FAFBFD;--ink:#14202E;--muted:#5E6B79;--line:rgba(14,43,77,.12);--red:#B23B3B;--ok:#3F9D6B}*{box-sizing:border-box}html,body,#app{height:100%;margin:0}body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink)}button,input{font:inherit}button{cursor:pointer}.phone{max-width:480px;margin:0 auto;height:100%;background:var(--cream);display:flex;flex-direction:column;overflow:hidden}.scroll{flex:1;overflow:auto;scrollbar-width:none}.scroll::-webkit-scrollbar{display:none}.top{background:linear-gradient(165deg,var(--navy2),var(--navy));color:var(--cream);border-bottom-left-radius:26px;border-bottom-right-radius:26px;padding:42px 20px 26px;position:relative}.top:before{content:"";position:absolute;top:0;left:22px;right:22px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)}.brand{display:flex;align-items:center;justify-content:center;gap:12px}.seal{width:42px;height:42px;border-radius:50%;border:1px solid rgba(194,161,77,.7);display:grid;place-items:center;color:#DBC189;font-family:Georgia,serif;letter-spacing:.05em;position:relative}.seal:after{content:"";position:absolute;inset:4px;border-radius:50%;border:1px solid rgba(194,161,77,.35)}.brand-title{font-family:Georgia,serif;font-size:23px;letter-spacing:.14em;line-height:1}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}.smallcap{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}.card{background:var(--cream);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 20px 40px -28px rgba(14,43,77,.5)}.auth-card{margin:-20px 18px 28px}.tabs{display:flex;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:20px}.tabs div{flex:1;text-align:center;padding:10px 0;border-radius:9px;font-weight:700;font-size:13px;color:rgba(94,107,121,.6)}.tabs .active{background:linear-gradient(160deg,var(--navy2),var(--navy));color:var(--cream)}h1,h2,h3{font-family:Georgia,serif;font-weight:400;margin:0}.muted{color:var(--muted)}.field-label{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 7px}.field{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 13px;margin-bottom:14px}.field:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px rgba(194,161,77,.16)}.field input{border:0;outline:0;background:transparent;flex:1;min-width:0;color:var(--ink);font-size:15px}.icon{width:20px;text-align:center;color:var(--blue)}.btn{width:100%;border:0;border-radius:13px;padding:15px 0;background:linear-gradient(160deg,var(--navy2),var(--navy));color:var(--cream);font-weight:700;box-shadow:0 14px 26px -14px rgba(14,43,77,.8)}.btn:active,.lift:active{transform:scale(.985)}.err{color:var(--red);font-size:12px;margin:-9px 0 12px}.alert{display:flex;gap:9px;background:rgba(178,59,59,.07);border:1px solid rgba(178,59,59,.25);border-radius:12px;padding:11px 13px;color:var(--red);font-size:12.5px;line-height:1.45;margin-bottom:16px}.link{background:none;border:0;color:var(--blue);font-weight:700;padding:0;margin-bottom:14px}.otp{display:flex;gap:9px;margin:8px 0 12px}.otp input{width:100%;aspect-ratio:1;text-align:center;font-family:Georgia,serif;font-size:22px;border:1px solid var(--line);border-radius:12px;background:var(--paper);outline:0}.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;font-family:Georgia,serif;background:linear-gradient(150deg,#234E80,var(--navy));color:var(--cream)}.avatar.gold{background:linear-gradient(150deg,#F5F7FA,#D2DBE6);color:var(--navy)}.member-card{margin:-38px 18px 0;border-radius:18px;padding:5px;background:linear-gradient(160deg,var(--navy2),var(--navy) 58%,#0A2243);box-shadow:0 18px 38px -18px rgba(14,43,77,.65);overflow:hidden;position:relative;color:var(--cream)}.member-card:after{content:"KG";position:absolute;right:-9px;bottom:-24px;font-family:Georgia,serif;font-size:86px;color:rgba(255,255,255,.05)}.member-inner{position:relative;z-index:1;border-radius:14px;border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 0 0 4px rgba(14,43,77,.9),inset 0 0 0 5px rgba(255,255,255,.12);padding:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:18px 18px 4px}.quick{border:1px solid var(--line);background:var(--paper);border-radius:14px;padding:12px 4px;display:flex;flex-direction:column;align-items:center;gap:7px;color:var(--ink);font-weight:700;font-size:12px}.qicon{width:38px;height:38px;border-radius:11px;background:rgba(14,43,77,.05);border:1px solid var(--line);display:grid;place-items:center}.section{display:flex;align-items:center;justify-content:space-between;padding:20px 18px 12px}.row-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px 15px;display:flex;gap:12px;align-items:flex-start}.list{padding:0 18px 22px;display:flex;flex-direction:column;gap:10px}.tag{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:99px}.title{padding:22px 20px 14px}.chips{display:flex;gap:8px;padding:0 18px 14px;overflow-x:auto;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.chip{white-space:nowrap;padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--blue);font-weight:700;font-size:12.5px}.chip.active{background:var(--navy);color:var(--cream);border-color:var(--navy)}.directory{padding:10px 18px 22px;display:flex;flex-direction:column}.member-row{display:flex;align-items:center;gap:13px;padding:12px 4px;border:0;border-bottom:1px solid var(--line);background:transparent;text-align:left;width:100%}.profile-top{text-align:center}.detail{padding:10px 18px 0}.detail-row{display:flex;gap:13px;padding:12px 2px;border-bottom:1px solid var(--line);align-items:flex-start}.bottom{flex-shrink:0;background:var(--paper);border-top:1px solid var(--line);padding-bottom:6px}.nav{display:flex;padding:9px 8px 4px}.nav button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);font-size:10px;font-weight:600}.nav button.active{color:var(--navy);font-weight:800}.fade{animation:fade .25s ease both}@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){.fade{animation:none}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0E2B4D" />
+  <title>KGMOA Member Portal Demo</title>
+  <style>
+    html, body, #root { margin: 0; width: 100%; height: 100%; background: #EEF1F5; }
+    body { overflow: hidden; -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; }
+  </style>
 </head>
 <body>
-<div id="app"></div>
-<script>
-(function(){
-'use strict';
-const OTP_CODE='12345';
-const doctors=[
-{pen:'768414',name:'Dr Aswathy U R',phone:'9446168886',rank:'Assistant Surgeon',institution:'PHC Peruva',speciality:'MD Anaesthesia'},
-{pen:'494012',name:'Dr Mammen P Cherian',phone:'9496357047',rank:'Assistant Surgeon',institution:'PHC Peruva',speciality:'—'},
-{pen:'703547',name:'Dr Sreeja Raj',phone:'9446412850',rank:'Assistant Surgeon',institution:'PHC Velloor',speciality:'MD Forensic Medicine'},
-{pen:'842312',name:'Dr Prasanth A M',phone:'9446157848',rank:'Assistant Surgeon',institution:'PHC Velloor',speciality:'MBA HM/HA'},
-{pen:'629888',name:'Dr Sonia Scaria',phone:'9496356632',rank:'Assistant Surgeon',institution:'PHC Kattampak',speciality:'MD Community Medicine'},
-{pen:'654017',name:'Dr Vijeesha Vijayan',phone:'9497754788',rank:'Assistant Surgeon',institution:'PHC Kattampak',speciality:'Diploma Obs & Gyn'},
-{pen:'364986',name:'Dr Sapna G I',phone:'9400633816',rank:'Civil Surgeon',institution:'CHC Arunoottimangalam',speciality:'—'},
-{pen:'484202',name:'Dr Binasha Sreedhar',phone:'9961372368',rank:'Assistant Surgeon',institution:'CHC Arunoottimangalam',speciality:'—'},
-{pen:'891981',name:'Dr Lijomon T K',phone:'9496345552',rank:'Assistant Surgeon',institution:'CHC Arunoottimangalam',speciality:'MS Orthopaedics'},
-{pen:'442387',name:'Dr Mini A S',phone:'9446384158',rank:'Civil Surgeon',institution:'PHC Athirampuzha',speciality:'—'},
-{pen:'732231',name:'Dr Nissi K J',phone:'9496131906',rank:'Assistant Surgeon',institution:'PHC Athirampuzha',speciality:'MD Pharmacology'},
-{pen:'795893',name:'Dr Asha Sukumaran',phone:'9074144039',rank:'Assistant Surgeon',institution:'PHC Athirampuzha',speciality:'MD Paediatrics'},
-{pen:'859234',name:'Dr Jabin Jose',phone:'7736125269',rank:'Assistant Surgeon',institution:'PHC Athirampuzha',speciality:'—'},
-{pen:'704808',name:'Dr Vineetha T S',phone:'9496565370',rank:'Assistant Surgeon',institution:'PHC Aymanam',speciality:'—'},
-{pen:'693128',name:'Dr Anush S Kudakasseril',phone:'9446265764',rank:'Assistant Surgeon',institution:'PHC Aymanam',speciality:'MD Paediatrics'},
-{pen:'997006',name:'Dr Harshith S',phone:'9400000000',rank:'Assistant Surgeon',institution:'PHC Aymanam',speciality:'—'},
-{pen:'935628',name:'Dr Sherin Maria Augustain',phone:'9495910955',rank:'Assistant Surgeon',institution:'PHC Onamthuruthu',speciality:'MS ENT'},
-{pen:'587322',name:'Dr Linto Lazar',phone:'9447766689',rank:'Assistant Surgeon',institution:'PHC Onamthuruthu',speciality:'—'}];
-const updates=[
-{type:'Circular',title:'DA arrears — third installment release',meta:'GO(Rt) No. 2148/2026/Fin',date:'12 Jun 2026',unread:true},
-{type:'Event',title:'Annual Conference 2026',meta:'02 Aug · Registration open',date:'11 Jun 2026',unread:true},
-{type:'Circular',title:'Revised transfer & posting norms, 2026',meta:'GO(P) No. 87/2026/H&FWD',date:'09 Jun 2026'},
-{type:'Welfare',title:'Medical welfare fund — new claim portal live',meta:'Claims now filed online',date:'06 Jun 2026'},
-{type:'Circular',title:'Pay revision arrears — option submission',meta:'Last date 30 Jun 2026',date:'02 Jun 2026'}];
-let state={auth:'register',form:{name:'',pen:'',phone:''},me:null,tab:'home',filter:'All',member:null,err:{},otp:'',rejected:false};
-const $=id=>document.getElementById(id); const app=$('app');
-function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-function initials(n){let a=String(n).replace(/^Dr\.?\s*/i,'').trim().split(/\s+/);return ((a[0]?.[0]||'')+(a[1]?.[0]||'')).toUpperCase();}
-function avatar(n,g=false,sz=44){return `<div class="avatar ${g?'gold':''}" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.36)}px">${esc(initials(n))}</div>`}
-function brand(){return `<div class="top"><div class="brand"><div class="seal">KG</div><div><div class="brand-title">KGMOA</div><div class="mono" style="font-size:8px;letter-spacing:.16em;color:#DBC189;margin-top:5px">MEMBER PORTAL</div></div></div><div style="font-size:11.5px;color:rgba(238,241,245,.65);text-align:center;margin-top:12px">Kerala Govt. Medical Officers' Association</div></div>`}
-function field(k,label,icon,ph,type='text'){let e=state.err[k];return `<div class="field-label">${label}</div><div class="field" style="border-color:${e?'var(--red)':'var(--line)'}"><span class="icon">${icon}</span><input id="f_${k}" type="${type}" value="${esc(state.form[k])}" placeholder="${ph}" ${type==='tel'||k==='pen'?'inputmode="numeric"':''}></div>${e?`<div class="err">${esc(e)}</div>`:''}`}
-function authScreen(){let body=''; if(state.auth==='register') body=register(); if(state.auth==='otp') body=otp(); if(state.auth==='confirm') body=confirm(); return `<div class="phone"><div class="scroll">${brand()}<div class="auth-card card"><div class="tabs"><div>Sign in</div><div class="active">Register</div></div>${body}</div><div style="text-align:center;font-size:11.5px;color:var(--muted);margin-top:-12px">🛡 Members-only portal · verified access</div></div></div>`}
-function register(){return `<div class="fade"><h2 style="font-size:22px">Create your account</h2><div class="muted" style="font-size:12.5px;margin:3px 0 18px">For serving government medical officers</div>${field('name','Full name','👤','Enter your full name')}${field('pen','PEN number','#','Enter your PEN number')}${field('phone','Mobile','☎','Enter your mobile number','tel')}${state.rejected?`<div class="alert">ⓘ <span>Your PEN number and mobile number don't match our member records. Please check both and try again.</span></div>`:''}<button class="btn" id="continueBtn">Continue →</button><div style="display:flex;gap:8px;text-align:center;justify-content:center;margin-top:14px;font-size:11.5px;color:var(--muted)">🛡 Only pre-approved members can register.</div></div>`}
-function otp(){return `<div class="fade"><button class="link" id="backReg">‹ Back</button><h2 style="font-size:22px">Verify your mobile</h2><div class="muted" style="font-size:12.5px;line-height:1.5;margin:3px 0 16px">Enter the OTP sent to +91 ${esc(state.form.phone)}. Demo OTP: <b>12345</b></div><div class="otp">${[0,1,2,3,4].map(i=>`<input maxlength="1" inputmode="numeric" value="${esc(state.otp[i]||'')}" data-otp="${i}">`).join('')}</div>${state.err.otp?`<div class="err" style="margin-top:0">${esc(state.err.otp)}</div>`:''}<button class="btn" id="verifyBtn">Verify →</button><div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)">Didn't get a code? <b style="color:var(--blue)">Resend</b></div></div>`}
-function confirm(){let r=state.record;return `<div class="fade"><button class="link" id="backOtp">‹ Back</button><div style="display:flex;gap:8px;align-items:center;margin-bottom:4px"><span style="width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(63,157,107,.12);color:var(--ok)">✓</span><h2 style="font-size:21px">Confirm your details</h2></div><div class="muted" style="font-size:12.5px;line-height:1.5;margin:2px 0 16px">We found your record in the association register.</div><div class="row-card" style="align-items:center;margin-bottom:12px">${avatar(r.name,true,48)}<div><h3 style="font-size:18px">${esc(r.name)}</h3><div class="muted" style="font-size:12px">${esc(r.rank)}</div></div></div><div class="row-card" style="display:block;margin-bottom:18px">${detailLine('#','PEN number',r.pen,true)}${detailLine('⚕','Rank',r.rank)}${detailLine('🏥','Institution',r.institution)}${detailLine('✎','Speciality',r.speciality==='—'?'Not on record':r.speciality)}${detailLine('☎','Mobile','+91 '+r.phone,false,true)}</div><button class="btn" id="confirmBtn">Confirm & continue →</button></div>`}
-function detailLine(ic,k,v,mono=false,last=false){return `<div style="display:flex;gap:12px;padding:12px 0;${last?'':'border-bottom:1px solid var(--line)'}"><span style="color:var(--gold);width:18px">${ic}</span><div><div class="smallcap" style="font-size:9.5px">${k}</div><div class="${mono?'mono':''}" style="font-size:14px;margin-top:2px">${esc(v)}</div></div></div>`}
-function mainScreen(){return `<div class="phone"><div class="scroll" id="scrollArea">${state.member?profile(state.member,false):content()}</div>${nav()}</div>`}
-function content(){if(state.tab==='home')return home(); if(state.tab==='updates')return updatesScreen(); if(state.tab==='directory')return directory(); return profile(state.me,true)}
-function home(){let m=state.me;return `<div class="fade"><div class="top" style="padding:44px 20px 56px"><div style="display:flex;justify-content:space-between;align-items:center"><div class="brand" style="justify-content:flex-start"><div class="seal">KG</div><div><div class="brand-title" style="font-size:20px">KGMOA</div><div class="mono" style="font-size:8px;color:rgba(238,241,245,.65);letter-spacing:.1em;margin-top:4px">MEMBER PORTAL</div></div></div><button style="width:38px;height:38px;border-radius:11px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:white">🔔</button></div><div style="margin-top:20px"><div class="mono" style="font-size:10.5px;letter-spacing:.14em;color:rgba(238,241,245,.68)">നമസ്കാരം · WELCOME</div><h1 style="font-size:23px;margin-top:5px">${esc(m.name)}</h1><div style="font-size:12.5px;color:rgba(244,238,225,.65);margin-top:2px">${esc(m.rank)}</div></div></div>${memberCard(m)}<div class="grid3"><button class="quick" data-tab="updates"><span class="qicon">📄</span>Circulars</button><button class="quick" data-tab="directory"><span class="qicon">👥</span>Directory</button><button class="quick" data-tab="updates"><span class="qicon">📅</span>Events</button></div><div class="section"><div class="smallcap" style="color:var(--blue)">Latest updates</div><button class="link" data-tab="updates" style="margin:0">View all ↗</button></div><div class="list">${updates.slice(0,2).map(updateRow).join('')}</div><div class="section"><div class="smallcap">Upcoming</div></div><div class="list"><div class="row-card" style="align-items:center"><div style="width:52px;height:56px;border-radius:12px;background:linear-gradient(160deg,var(--navy2),var(--navy));color:white;display:grid;place-items:center"><div><div class="mono" style="font-size:9px;color:rgba(255,255,255,.7)">AUG</div><div style="font-family:Georgia,serif;font-size:22px">02</div></div></div><div style="flex:1"><h3 style="font-size:16px">Annual Conference 2026</h3><div class="muted" style="font-size:12px;margin-top:3px">📍 Venue to be announced · 02 Aug</div></div><span class="muted">›</span></div></div></div>`}
-function memberCard(m){return `<div class="member-card"><div class="member-inner"><div style="display:flex;justify-content:space-between"><div><div style="font-family:Georgia,serif;font-size:19px;letter-spacing:.04em">KGMOA</div><div class="mono" style="font-size:8.5px;letter-spacing:.18em;color:rgba(238,241,245,.6)">MEMBERSHIP · ESTD 1965</div></div><div class="seal" style="width:34px;height:34px">KG</div></div><div style="display:flex;gap:14px;align-items:center;margin-top:18px">${avatar(m.name,true,52)}<div><h3 style="font-size:19px;color:white;line-height:1.1">${esc(m.name)}</h3><div style="font-size:12.5px;color:rgba(244,238,225,.72);margin-top:3px">${esc(m.rank)} · ${esc(m.institution)}</div></div></div><div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:18px;padding-top:13px;border-top:1px solid rgba(255,255,255,.16)"><div><div class="mono" style="font-size:8.5px;color:rgba(244,238,225,.5);letter-spacing:.16em">PEN</div><div class="mono" style="font-size:13px;margin-top:3px">${esc(m.pen)}</div></div><div style="text-align:right"><div class="mono" style="font-size:8.5px;color:rgba(244,238,225,.5);letter-spacing:.16em">VALID THROUGH</div><div class="mono" style="font-size:13px;margin-top:3px">● Mar 2027</div></div></div></div></div>`}
-function updateRow(u){let colors={Circular:['rgba(14,43,77,.07)','var(--navy)'],Event:['rgba(30,77,130,.12)','var(--blue)'],Welfare:['rgba(178,59,59,.10)','var(--red)']};let c=colors[u.type];return `<div class="row-card lift"><div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="tag" style="background:${c[0]};color:${c[1]}">${u.type}</span>${u.unread?'<span style="width:6px;height:6px;border-radius:50%;background:var(--gold)"></span>':''}</div><div style="font-size:14px;font-weight:700;line-height:1.3">${esc(u.title)}</div><div class="mono muted" style="font-size:11px;margin-top:5px">${esc(u.date)} · ${esc(u.meta)}</div></div><span class="muted">›</span></div>`}
-function updatesScreen(){let tabs=['All','Circular','Event','Welfare'];let list=state.filter==='All'?updates:updates.filter(u=>u.type===state.filter);return `<div class="fade"><div class="title"><h1 style="font-size:27px">Updates</h1><div class="muted" style="font-size:12.5px;margin-top:2px">Circulars, events & welfare notices</div></div><div class="chips">${tabs.map(t=>`<button class="chip ${state.filter===t?'active':''}" data-filter="${t}">${t==='All'?'All':t+'s'}</button>`).join('')}</div><div class="list">${list.map(updateRow).join('')}</div></div>`}
-function directory(){let q=state.q||'';let list=doctors.filter(m=>(m.name+m.rank+m.institution).toLowerCase().includes(q.toLowerCase()));return `<div class="fade"><div class="title"><h1 style="font-size:27px">Directory</h1><div class="muted" style="font-size:12.5px;margin-top:2px">${doctors.length} members</div></div><div style="padding:0 18px"><div class="field" style="margin:0"><span class="icon">🔍</span><input id="searchBox" value="${esc(q)}" placeholder="Search name, rank, institution"></div></div><div class="directory">${list.map(m=>`<button class="member-row" data-member="${m.pen}">${avatar(m.name,false,42)}<div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:700">${esc(m.name)}</div><div class="muted" style="font-size:12px;margin-top:1px">${esc(m.rank)} · ${esc(m.institution)}</div></div><span class="muted">›</span></button>`).join('')||'<div class="muted" style="text-align:center;padding:40px 0;font-size:13.5px">No members match that search.</div>'}</div></div>`}
-function profile(m,self){let spec=m.speciality&&m.speciality!=='—'?m.speciality:'Not on record';return `<div class="fade"><div class="top profile-top" style="padding:26px 20px 30px">${!self?'<button id="backMember" style="position:absolute;left:14px;top:14px;width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:white">‹</button>':''}<div style="display:flex;justify-content:center;margin-bottom:12px">${avatar(m.name,true,76)}</div><h1 style="font-size:23px">${esc(m.name)}</h1><div style="font-size:13px;color:rgba(238,241,245,.7);margin-top:3px">${esc(m.rank)} · ${esc(m.institution)}</div><div style="display:inline-flex;gap:6px;margin-top:12px;padding:5px 12px;border-radius:99px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08)" class="mono">✓ PEN ${esc(m.pen)}</div></div><div style="padding:18px 18px 0"><div class="smallcap">Service details</div></div><div class="detail">${detailLine('⚕','Rank',m.rank)}${detailLine('🏥','Institution',m.institution)}${detailLine('✎','Speciality',spec)}${detailLine('#','PEN number',m.pen,true,true)}</div><div style="padding:18px 18px 0"><div class="smallcap">Contact</div></div><div class="detail">${detailLine('☎','Phone','+91 '+m.phone)}${detailLine('✉','Email',initials(m.name).toLowerCase()+'.'+m.pen+'@kgmoa.in',false,true)}</div>${self?`<div style="padding:18px 18px 0"><div class="smallcap">Account</div></div><div class="detail">${['Edit institution & posting','Notifications','Privacy','Help & support','Sign out'].map((t,i)=>`<div class="detail-row" style="${i===4?'border-bottom:0;color:var(--red)':''}"><span>${i===0?'🏥':i===1?'🔔':i===2?'🛡':i===3?'?':'↩'}</span><div style="flex:1;font-size:14px">${t}</div>${i<4?'<span class="muted">›</span>':''}</div>`).join('')}</div>`:`<div style="padding:14px 18px 24px;display:flex;gap:10px"><a href="tel:+91${esc(m.phone)}" class="btn" style="text-decoration:none;text-align:center">☎ Call</a><a href="mailto:${esc(initials(m.name).toLowerCase()+'.'+m.pen+'@kgmoa.in')}" class="btn" style="text-decoration:none;text-align:center;background:var(--paper);color:var(--navy);border:1px solid var(--line);box-shadow:none">✉ Message</a></div>`}</div>`}
-function nav(){let navs=[['home','⌂','Home'],['updates','📣','Updates'],['directory','👥','Directory'],['profile','👤','Profile']];return `<div class="bottom"><div class="nav">${navs.map(n=>`<button data-nav="${n[0]}" class="${state.tab===n[0]&&!state.member?'active':''}"><span style="font-size:20px">${n[1]}</span><span>${n[2]}</span><span style="width:4px;height:4px;border-radius:50%;background:${state.tab===n[0]&&!state.member?'var(--gold)':'transparent'}"></span></button>`).join('')}</div></div>`}
-function validate(){let e={};let pen=state.form.pen.trim(), phone=state.form.phone.replace(/\D/g,''); if(!state.form.name.trim()) e.name='Enter your name'; if(!/^\d{4,8}$/.test(pen)) e.pen='Enter a valid PEN number'; if(!/^\d{10}$/.test(phone)) e.phone='Enter a valid 10-digit mobile number'; state.err=e; if(Object.keys(e).length)return; let r=doctors.find(d=>d.pen===pen&&d.phone===phone); if(!r){state.rejected=true;return} state.record=r; state.auth='otp'; state.rejected=false; state.otp=''; state.err={};}
-function bind(){document.querySelectorAll('[id^=f_]').forEach(inp=>inp.oninput=e=>{state.form[inp.id.slice(2)]=e.target.value;state.rejected=false}); $('continueBtn')&&($('continueBtn').onclick=()=>{validate();render()}); $('backReg')&&($('backReg').onclick=()=>{state.auth='register';state.err={};render()}); $('backOtp')&&($('backOtp').onclick=()=>{state.auth='otp';state.err={};render()}); document.querySelectorAll('[data-otp]').forEach(inp=>inp.oninput=e=>{let i=+inp.dataset.otp,v=e.target.value.replace(/\D/g,'').slice(-1);let a=state.otp.split('');a[i]=v;state.otp=a.join('');state.err={};render();let next=document.querySelector(`[data-otp="${i+1}"]`); if(v&&next)next.focus();}); $('verifyBtn')&&($('verifyBtn').onclick=()=>{if(state.otp===OTP_CODE){state.auth='confirm';state.err={};}else state.err={otp:'Incorrect code. Please try again.'};render()}); $('confirmBtn')&&($('confirmBtn').onclick=()=>{state.me={...state.record};state.tab='home';state.member=null;render()}); document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;state.member=null;render()}); document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>{state.tab=b.dataset.nav;state.member=null;render()}); document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{state.filter=b.dataset.filter;render()}); $('searchBox')&&($('searchBox').oninput=e=>{state.q=e.target.value;render()}); document.querySelectorAll('[data-member]').forEach(b=>b.onclick=()=>{state.member=doctors.find(d=>d.pen===b.dataset.member);render()}); $('backMember')&&($('backMember').onclick=()=>{state.member=null;render()});}
-function render(){app.innerHTML=state.me?mainScreen():authScreen();bind();}
-try{render()}catch(err){app.innerHTML='<div style="padding:30px;font-family:system-ui;color:#B23B3B">App failed to load: '+esc(err.message||err)+'</div>';console.error(err)}
-})();
-</script>
+  <div id="root"></div>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script>
+
+const { useState, useRef, useEffect } = React;
+
+function createIcon(paths) {
+  return function Icon({ size = 24, color = 'currentColor', strokeWidth = 2, style = {}, ...props }) {
+    return React.createElement('svg', {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: size,
+      height: size,
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: color,
+      strokeWidth,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      style,
+      ...props
+    }, paths.map((p, i) => React.createElement(p[0], { key: i, ...p[1] })));
+  };
+}
+
+const User = createIcon([
+  ['path', { d: 'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2' }],
+  ['circle', { cx: '12', cy: '7', r: '4' }]
+]);
+const Phone = createIcon([
+  ['path', { d: 'M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.59 2.61a2 2 0 0 1-.45 2.11L8 9.69a16 16 0 0 0 6.31 6.31l1.25-1.25a2 2 0 0 1 2.11-.45c.84.27 1.71.47 2.61.59A2 2 0 0 1 22 16.92z' }]
+]);
+const Hash = createIcon([
+  ['line', { x1: '4', y1: '9', x2: '20', y2: '9' }],
+  ['line', { x1: '4', y1: '15', x2: '20', y2: '15' }],
+  ['line', { x1: '10', y1: '3', x2: '8', y2: '21' }],
+  ['line', { x1: '16', y1: '3', x2: '14', y2: '21' }]
+]);
+const ArrowRight = createIcon([
+  ['path', { d: 'M5 12h14' }],
+  ['path', { d: 'm12 5 7 7-7 7' }]
+]);
+const ShieldCheck = createIcon([
+  ['path', { d: 'M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3z' }],
+  ['path', { d: 'm9 12 2 2 4-4' }]
+]);
+const Check = createIcon([
+  ['path', { d: 'M20 6 9 17l-5-5' }]
+]);
+const ChevronLeft = createIcon([
+  ['path', { d: 'm15 18-6-6 6-6' }]
+]);
+const Home = createIcon([
+  ['path', { d: 'm3 11 9-8 9 8' }],
+  ['path', { d: 'M5 10v10h14V10' }],
+  ['path', { d: 'M9 20v-6h6v6' }]
+]);
+const Bell = createIcon([
+  ['path', { d: 'M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9' }],
+  ['path', { d: 'M13.73 21a2 2 0 0 1-3.46 0' }]
+]);
+const Users = createIcon([
+  ['path', { d: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2' }],
+  ['circle', { cx: '9', cy: '7', r: '4' }],
+  ['path', { d: 'M22 21v-2a4 4 0 0 0-3-3.87' }],
+  ['path', { d: 'M16 3.13a4 4 0 0 1 0 7.75' }]
+]);
+const ChevronRight = createIcon([
+  ['path', { d: 'm9 18 6-6-6-6' }]
+]);
+const Mail = createIcon([
+  ['rect', { x: '3', y: '5', width: '18', height: '14', rx: '2' }],
+  ['path', { d: 'm3 7 9 6 9-6' }]
+]);
+const MapPin = createIcon([
+  ['path', { d: 'M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0z' }],
+  ['circle', { cx: '12', cy: '10', r: '3' }]
+]);
+const Calendar = createIcon([
+  ['rect', { x: '3', y: '4', width: '18', height: '18', rx: '2' }],
+  ['path', { d: 'M16 2v4' }],
+  ['path', { d: 'M8 2v4' }],
+  ['path', { d: 'M3 10h18' }]
+]);
+const FileText = createIcon([
+  ['path', { d: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z' }],
+  ['path', { d: 'M14 2v6h6' }],
+  ['path', { d: 'M16 13H8' }],
+  ['path', { d: 'M16 17H8' }],
+  ['path', { d: 'M10 9H8' }]
+]);
+const Megaphone = createIcon([
+  ['path', { d: 'm3 11 18-5v12L3 14z' }],
+  ['path', { d: 'M11.6 16.8a3 3 0 0 1-5.8-1.6' }]
+]);
+const BadgeCheck = createIcon([
+  ['path', { d: 'M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.77 4 4 0 0 1 0 6.76 4 4 0 0 1-4.78 4.77 4 4 0 0 1-6.74 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76z' }],
+  ['path', { d: 'm9 12 2 2 4-4' }]
+]);
+const Building2 = createIcon([
+  ['path', { d: 'M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18' }],
+  ['path', { d: 'M6 12H4a2 2 0 0 0-2 2v8h20v-8a2 2 0 0 0-2-2h-2' }],
+  ['path', { d: 'M10 6h4' }],
+  ['path', { d: 'M10 10h4' }],
+  ['path', { d: 'M10 14h4' }],
+  ['path', { d: 'M10 18h4' }]
+]);
+const Clock = createIcon([
+  ['circle', { cx: '12', cy: '12', r: '10' }],
+  ['path', { d: 'M12 6v6l4 2' }]
+]);
+const Settings = createIcon([
+  ['path', { d: 'M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.72l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z' }],
+  ['circle', { cx: '12', cy: '12', r: '3' }]
+]);
+const Shield = createIcon([
+  ['path', { d: 'M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3z' }]
+]);
+const LifeBuoy = createIcon([
+  ['circle', { cx: '12', cy: '12', r: '10' }],
+  ['circle', { cx: '12', cy: '12', r: '4' }],
+  ['path', { d: 'm4.93 4.93 4.24 4.24' }],
+  ['path', { d: 'm14.83 14.83 4.24 4.24' }],
+  ['path', { d: 'm14.83 9.17 4.24-4.24' }],
+  ['path', { d: 'm4.93 19.07 4.24-4.24' }]
+]);
+const LogOut = createIcon([
+  ['path', { d: 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4' }],
+  ['path', { d: 'M16 17l5-5-5-5' }],
+  ['path', { d: 'M21 12H9' }]
+]);
+const ArrowUpRight = createIcon([
+  ['path', { d: 'M7 7h10v10' }],
+  ['path', { d: 'M7 17 17 7' }]
+]);
+const Search = createIcon([
+  ['circle', { cx: '11', cy: '11', r: '8' }],
+  ['path', { d: 'm21 21-4.35-4.35' }]
+]);
+const Pencil = createIcon([
+  ['path', { d: 'M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z' }],
+  ['path', { d: 'm15 5 4 4' }]
+]);
+const Info = createIcon([
+  ['circle', { cx: '12', cy: '12', r: '10' }],
+  ['path', { d: 'M12 16v-4' }],
+  ['path', { d: 'M12 8h.01' }]
+]);
+const Stethoscope = createIcon([
+  ['path', { d: 'M4.8 2.3A.3.3 0 1 0 4.2 2a.3.3 0 0 0 .6.3' }],
+  ['path', { d: 'M8.8 2.3A.3.3 0 1 0 8.2 2a.3.3 0 0 0 .6.3' }],
+  ['path', { d: 'M4.5 2v7a4 4 0 0 0 8 0V2' }],
+  ['path', { d: 'M8.5 13a6 6 0 0 0 12 0v-1' }],
+  ['circle', { cx: '20.5', cy: '10.5', r: '2' }]
+]);
+
+/* ================================================================== */
+/*  KGMOA — Integrated member app                                      */
+/*  Register → OTP → confirm record → main member app.                */
+/*  Navy + a dash of gold. Self-contained; HTML-export friendly.      */
+/* ================================================================== */
+const C = {
+    navy: "#0E2B4D",
+    navy2: "#173E69",
+    navySoft: "#1E4D82",
+    acc: "#C2A14D",
+    accSoft: "#DBC189",
+    cream: "#EEF1F5",
+    paper: "#FAFBFD",
+    ink: "#14202E",
+    muted: "#5E6B79",
+    line: "rgba(14,43,77,0.10)",
+    red: "#B23B3B",
+    ok: "#3F9D6B",
+};
+const FONT = {
+    d: "'Marcellus', Georgia, serif",
+    b: "'Hanken Grotesk', system-ui, sans-serif",
+    m: "'Spline Sans Mono', ui-monospace, monospace",
+};
+const OTP_CODE = "12345";
+/* ---- doctor database (from the uploaded register) ---- */
+const DOCTORS = [
+    { pen: "768414", name: "Dr Aswathy U R", phone: "9446168886", rank: "Assistant Surgeon", institution: "PHC Peruva", speciality: "MD Anaesthesia" },
+    { pen: "494012", name: "Dr Mammen P Cherian", phone: "9496357047", rank: "Assistant Surgeon", institution: "PHC Peruva", speciality: "—" },
+    { pen: "703547", name: "Dr Sreeja Raj", phone: "9446412850", rank: "Assistant Surgeon", institution: "PHC Velloor", speciality: "MD Forensic Medicine" },
+    { pen: "842312", name: "Dr Prasanth A M", phone: "9446157848", rank: "Assistant Surgeon", institution: "PHC Velloor", speciality: "MBA HM/HA" },
+    { pen: "629888", name: "Dr Sonia Scaria", phone: "9496356632", rank: "Assistant Surgeon", institution: "PHC Kattampak", speciality: "MD Community Medicine" },
+    { pen: "654017", name: "Dr Vijeesha Vijayan", phone: "9497754788", rank: "Assistant Surgeon", institution: "PHC Kattampak", speciality: "Diploma Obs & Gyn" },
+    { pen: "364986", name: "Dr Sapna G I", phone: "9400633816", rank: "Civil Surgeon", institution: "CHC Arunoottimangalam", speciality: "—" },
+    { pen: "484202", name: "Dr Binasha Sreedhar", phone: "9961372368", rank: "Assistant Surgeon", institution: "CHC Arunoottimangalam", speciality: "—" },
+    { pen: "891981", name: "Dr Lijomon T K", phone: "9496345552", rank: "Assistant Surgeon", institution: "CHC Arunoottimangalam", speciality: "MS Orthopaedics" },
+    { pen: "442387", name: "Dr Mini A S", phone: "9446384158", rank: "Civil Surgeon", institution: "PHC Athirampuzha", speciality: "—" },
+    { pen: "732231", name: "Dr Nissi K J", phone: "9496131906", rank: "Assistant Surgeon", institution: "PHC Athirampuzha", speciality: "MD Pharmacology" },
+    { pen: "795893", name: "Dr Asha Sukumaran", phone: "9074144039", rank: "Assistant Surgeon", institution: "PHC Athirampuzha", speciality: "MD Paediatrics" },
+    { pen: "859234", name: "Dr Jabin Jose", phone: "7736125269", rank: "Assistant Surgeon", institution: "PHC Athirampuzha", speciality: "—" },
+    { pen: "704808", name: "Dr Vineetha T S", phone: "9496565370", rank: "Assistant Surgeon", institution: "PHC Aymanam", speciality: "—" },
+    { pen: "693128", name: "Dr Anush S Kudakasseril", phone: "9446265764", rank: "Assistant Surgeon", institution: "PHC Aymanam", speciality: "MD Paediatrics" },
+    { pen: "997006", name: "Dr Harshith S", phone: "9400000000", rank: "Assistant Surgeon", institution: "PHC Aymanam", speciality: "—" },
+    { pen: "935628", name: "Dr Sherin Maria Augustain", phone: "9495910955", rank: "Assistant Surgeon", institution: "PHC Onamthuruthu", speciality: "MS ENT" },
+    { pen: "587322", name: "Dr Linto Lazar", phone: "9447766689", rank: "Assistant Surgeon", institution: "PHC Onamthuruthu", speciality: "—" },
+];
+const UPDATES = [
+    { type: "Circular", title: "DA arrears — third installment release", meta: "GO(Rt) No. 2148/2026/Fin", date: "12 Jun 2026", unread: true },
+    { type: "Event", title: "Annual Conference 2026", meta: "02 Aug · Registration open", date: "11 Jun 2026", unread: true },
+    { type: "Circular", title: "Revised transfer & posting norms, 2026", meta: "GO(P) No. 87/2026/H&FWD", date: "09 Jun 2026", unread: false },
+    { type: "Welfare", title: "Medical welfare fund — new claim portal live", meta: "Claims now filed online", date: "06 Jun 2026", unread: false },
+    { type: "Circular", title: "Pay revision arrears — option submission", meta: "Last date 30 Jun 2026", date: "02 Jun 2026", unread: false },
+];
+const TYPE_COLOR = {
+    Circular: { bg: "rgba(14,43,77,0.07)", fg: C.navy },
+    Event: { bg: "rgba(30,77,130,0.12)", fg: "#1E4D82" },
+    Welfare: { bg: "rgba(178,59,59,0.10)", fg: C.red },
+};
+const initialsOf = (name) => {
+    var _a, _b;
+    const clean = name.replace(/^Dr\.?\s*/i, "").trim().split(/\s+/);
+    return ((((_a = clean[0]) === null || _a === void 0 ? void 0 : _a[0]) || "") + (((_b = clean[1]) === null || _b === void 0 ? void 0 : _b[0]) || "")).toUpperCase();
+};
+/* ------------------------------ atoms ----------------------------- */
+function Avatar({ name, size = 44, gold = false }) {
+    return (React.createElement("div", { style: {
+            width: size, height: size, borderRadius: "50%", flexShrink: 0,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontFamily: FONT.d, fontSize: size * 0.36, letterSpacing: ".02em",
+            color: gold ? C.navy : C.cream,
+            background: gold ? "linear-gradient(150deg,#F5F7FA,#D2DBE6)" : "linear-gradient(150deg,#234E80,#0E2B4D)",
+            border: gold ? "none" : "1px solid rgba(255,255,255,0.16)",
+        } }, initialsOf(name)));
+}
+function Seal({ size = 40 }) {
+    return (React.createElement("div", { style: { width: size, height: size, borderRadius: "50%", border: `1px solid rgba(194,161,77,0.6)`, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", flexShrink: 0 } },
+        React.createElement("div", { style: { position: "absolute", inset: 3, borderRadius: "50%", border: `1px solid rgba(194,161,77,0.35)` } }),
+        React.createElement("span", { style: { fontFamily: FONT.d, fontSize: size * 0.34, color: C.accSoft, letterSpacing: ".04em" } }, "KG")));
+}
+function Label({ children, color = C.muted }) {
+    return React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 10.5, letterSpacing: ".16em", textTransform: "uppercase", color } }, children);
+}
+function Field({ icon: Icon, label, value, onChange, placeholder, error, type = "text", inputMode }) {
+    return (React.createElement("div", { style: { marginBottom: 14 } },
+        React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 10, letterSpacing: ".12em", textTransform: "uppercase", color: C.muted, marginBottom: 7 } }, label),
+        React.createElement("div", { className: "field", style: { display: "flex", alignItems: "center", gap: 10, background: C.paper, border: `1px solid ${error ? C.red : C.line}`, borderRadius: 12, padding: "12px 13px" } },
+            React.createElement(Icon, { size: 16, color: error ? C.red : C.navySoft, style: { flexShrink: 0 } }),
+            React.createElement("input", { value: value, onChange: onChange, placeholder: placeholder, type: type, inputMode: inputMode, style: { border: "none", outline: "none", background: "transparent", flex: 1, fontFamily: FONT.b, fontSize: 14.5, color: C.ink, minWidth: 0 } })),
+        error && React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 11.5, color: C.red, marginTop: 5 } }, error)));
+}
+function PrimaryBtn({ children, onClick, icon: Icon }) {
+    return (React.createElement("button", { onClick: onClick, className: "lift", style: {
+            width: "100%", padding: "15px 0", borderRadius: 13, border: "none", cursor: "pointer",
+            background: "linear-gradient(160deg,#173E69,#0E2B4D)", color: C.cream,
+            fontFamily: FONT.b, fontSize: 15, fontWeight: 600,
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+            boxShadow: "0 14px 26px -14px rgba(14,43,77,0.8)",
+        } },
+        children,
+        Icon && React.createElement(Icon, { size: 17 })));
+}
+/* ============================ AUTH FLOW ============================ */
+function BrandPanel() {
+    return (React.createElement("div", { style: { background: "linear-gradient(165deg,#173E69,#0E2B4D)", padding: "44px 24px 28px", position: "relative", borderBottomLeftRadius: 26, borderBottomRightRadius: 26 } },
+        React.createElement("div", { style: { position: "absolute", top: 0, left: 24, right: 24, height: 1, background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.32),transparent)" } }),
+        React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", gap: 12 } },
+            React.createElement(Seal, { size: 40 }),
+            React.createElement("div", null,
+                React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 23, color: C.cream, letterSpacing: ".14em", lineHeight: 1 } }, "KGMOA"),
+                React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 8, letterSpacing: ".16em", color: C.accSoft, marginTop: 5 } }, "MEMBER PORTAL"))),
+        React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 11.5, color: "rgba(238,241,245,0.6)", marginTop: 12, textAlign: "center" } }, "Kerala Govt. Medical Officers' Association")));
+}
+function RegisterStep({ onNext }) {
+    const [f, setF] = useState({ name: "", pen: "", phone: "" });
+    const [err, setErr] = useState({});
+    const [rejected, setRejected] = useState(false);
+    const set = (k) => (e) => { setF((s) => ({ ...s, [k]: e.target.value })); setRejected(false); };
+    const submit = () => {
+        const e = {};
+        const pen = f.pen.trim();
+        const phoneDigits = f.phone.replace(/\D/g, "");
+        if (!f.name.trim())
+            e.name = "Enter your name";
+        if (!pen)
+            e.pen = "Enter your PEN number";
+        else if (!/^\d{4,8}$/.test(pen))
+            e.pen = "Enter a valid PEN number";
+        if (!phoneDigits)
+            e.phone = "Enter your mobile number";
+        else if (!/^\d{10}$/.test(phoneDigits))
+            e.phone = "Enter a valid 10-digit mobile number";
+        setErr(e);
+        if (Object.keys(e).length)
+            return;
+        // Both PEN and mobile must correctly match the same member record.
+        const record = DOCTORS.find((d) => d.pen === pen && d.phone.replace(/\D/g, "") === phoneDigits) || null;
+        if (!record) {
+            setRejected(true);
+            return;
+        }
+        onNext(f, record);
+    };
+    return (React.createElement("div", { className: "fade" },
+        React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 22, color: C.ink } }, "Create your account"),
+        React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12.5, color: C.muted, marginTop: 3, marginBottom: 18 } }, "For serving government medical officers"),
+        React.createElement(Field, { icon: User, label: "Full name", value: f.name, onChange: set("name"), placeholder: "Enter your full name", error: err.name }),
+        React.createElement(Field, { icon: Hash, label: "PEN number", value: f.pen, onChange: set("pen"), placeholder: "Enter your PEN number", error: err.pen, inputMode: "numeric" }),
+        React.createElement(Field, { icon: Phone, label: "Mobile", value: f.phone, onChange: set("phone"), placeholder: "Enter your mobile number", error: err.phone, inputMode: "tel" }),
+        rejected && (React.createElement("div", { style: { display: "flex", gap: 9, alignItems: "flex-start", background: "rgba(178,59,59,0.07)", border: "1px solid rgba(178,59,59,0.25)", borderRadius: 12, padding: "11px 13px", marginBottom: 16 } },
+            React.createElement(Info, { size: 15, color: C.red, style: { flexShrink: 0, marginTop: 1 } }),
+            React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 12.5, color: C.red, lineHeight: 1.5 } }, "Your PEN number and mobile number don't match our member records. Please check both and try again, or contact your district unit if you believe this is an error."))),
+        React.createElement("div", { style: { marginTop: 4 } },
+            React.createElement(PrimaryBtn, { onClick: submit, icon: ArrowRight }, "Continue")),
+        React.createElement("div", { style: { display: "flex", alignItems: "flex-start", gap: 8, justifyContent: "center", textAlign: "center", marginTop: 14 } },
+            React.createElement(ShieldCheck, { size: 14, color: C.acc, style: { flexShrink: 0, marginTop: 1 } }),
+            React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 11.5, color: C.muted, lineHeight: 1.45 } }, "Only pre-approved members can register. We'll verify your PEN and mobile number against association records."))));
+}
+function OtpStep({ form, onBack, onVerified }) {
+    const [otp, setOtp] = useState(["", "", "", "", ""]);
+    const [err, setErr] = useState("");
+    const refs = useRef([]);
+    const setDigit = (i, v) => {
+        var _a;
+        if (!/^\d?$/.test(v))
+            return;
+        const next = [...otp];
+        next[i] = v;
+        setOtp(next);
+        setErr("");
+        if (v && i < 4)
+            (_a = refs.current[i + 1]) === null || _a === void 0 ? void 0 : _a.focus();
+    };
+    const onKey = (i, e) => { var _a; if (e.key === "Backspace" && !otp[i] && i > 0)
+        (_a = refs.current[i - 1]) === null || _a === void 0 ? void 0 : _a.focus(); };
+    const verify = () => {
+        if (otp.join("") === OTP_CODE) {
+            onVerified();
+        }
+        else {
+            setErr("Incorrect code. Please try again.");
+        }
+    };
+    return (React.createElement("div", { className: "fade" },
+        React.createElement("button", { onClick: onBack, className: "linkback", style: { display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", cursor: "pointer", color: C.navySoft, fontFamily: FONT.b, fontSize: 12.5, fontWeight: 600, marginBottom: 14, padding: 0 } },
+            React.createElement(ChevronLeft, { size: 15 }),
+            " Back"),
+        React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 22, color: C.ink } }, "Verify your mobile"),
+        React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12.5, color: C.muted, marginTop: 3, marginBottom: 20, lineHeight: 1.5 } },
+            "Enter the OTP sent to ",
+            form.phone ? `+91 ${form.phone}` : "your registered mobile number",
+            "."),
+        React.createElement("div", { style: { display: "flex", gap: 9, justifyContent: "space-between", marginBottom: 10 } }, otp.map((d, i) => (React.createElement("input", { key: i, ref: (el) => (refs.current[i] = el), value: d, onChange: (e) => setDigit(i, e.target.value), onKeyDown: (e) => onKey(i, e), inputMode: "numeric", maxLength: 1, style: { width: "100%", aspectRatio: "1", textAlign: "center", fontFamily: FONT.d, fontSize: 22, color: C.ink,
+                border: `1px solid ${err ? C.red : C.line}`, borderRadius: 12, background: C.paper, outline: "none" } })))),
+        err && React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12, color: C.red, marginBottom: 10 } }, err),
+        React.createElement(PrimaryBtn, { onClick: verify, icon: ArrowRight }, "Verify"),
+        React.createElement("div", { style: { textAlign: "center", marginTop: 14, fontFamily: FONT.b, fontSize: 12, color: C.muted } },
+            "Didn't get a code? ",
+            React.createElement("span", { style: { color: C.navySoft, fontWeight: 600 } }, "Resend"))));
+}
+function ConfirmStep({ form, record, onBack, onConfirm }) {
+    const profile = {
+        name: record.name,
+        pen: record.pen,
+        phone: record.phone,
+        rank: record.rank,
+        institution: record.institution,
+        speciality: record.speciality && record.speciality !== "—" ? record.speciality : "Not on record",
+    };
+    const rows = [
+        { icon: BadgeCheck, k: "PEN number", v: profile.pen, mono: true },
+        { icon: Stethoscope, k: "Rank", v: profile.rank },
+        { icon: Building2, k: "Institution", v: profile.institution, note: "You can edit your institution later in Settings." },
+        { icon: Pencil, k: "Speciality", v: profile.speciality },
+        { icon: Phone, k: "Mobile", v: profile.phone ? `+91 ${profile.phone}` : "—" },
+    ];
+    return (React.createElement("div", { className: "fade" },
+        React.createElement("button", { onClick: onBack, className: "linkback", style: { display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", cursor: "pointer", color: C.navySoft, fontFamily: FONT.b, fontSize: 12.5, fontWeight: 600, marginBottom: 14, padding: 0 } },
+            React.createElement(ChevronLeft, { size: 15 }),
+            " Back"),
+        React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 4 } },
+            React.createElement("div", { style: { width: 30, height: 30, borderRadius: "50%", background: "rgba(63,157,107,0.12)", display: "flex", alignItems: "center", justifyContent: "center" } },
+                React.createElement(Check, { size: 16, color: C.ok, strokeWidth: 2.6 })),
+            React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 21, color: C.ink } }, "Confirm your details")),
+        React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12.5, color: C.muted, marginTop: 2, marginBottom: 16, lineHeight: 1.5 } }, "We found your record in the association register. Please confirm it's correct."),
+        React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 13, background: C.paper, border: `1px solid ${C.line}`, borderRadius: 14, padding: "14px 15px", marginBottom: 12 } },
+            React.createElement(Avatar, { name: profile.name, size: 48, gold: true }),
+            React.createElement("div", { style: { minWidth: 0 } },
+                React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 18, color: C.ink, lineHeight: 1.15 } }, profile.name),
+                React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12, color: C.muted, marginTop: 2 } }, profile.rank),
+                form.name.trim().toLowerCase() !== profile.name.toLowerCase() && (React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 5, marginTop: 6 } },
+                    React.createElement(Info, { size: 11, color: "#8A6A22" }),
+                    React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 11, color: "#8A6A22", fontStyle: "italic" } }, "Showing the name on your official record."))))),
+        React.createElement("div", { style: { background: C.paper, border: `1px solid ${C.line}`, borderRadius: 14, padding: "4px 15px", marginBottom: 18 } }, rows.map((r, i) => (React.createElement("div", { key: r.k, style: { display: "flex", gap: 12, padding: "12px 0", borderBottom: i === rows.length - 1 ? "none" : `1px solid ${C.line}`, alignItems: "flex-start" } },
+            React.createElement(r.icon, { size: 16, color: C.acc, style: { marginTop: 2, flexShrink: 0 } }),
+            React.createElement("div", { style: { minWidth: 0, flex: 1 } },
+                React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 9.5, letterSpacing: ".1em", textTransform: "uppercase", color: C.muted } }, r.k),
+                React.createElement("div", { style: { fontFamily: r.mono ? FONT.m : FONT.b, fontSize: r.mono ? 13.5 : 14, color: C.ink, marginTop: 2 } }, r.v),
+                r.note && (React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 5, marginTop: 5 } },
+                    React.createElement(Info, { size: 11, color: "#8A6A22" }),
+                    React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 11, color: "#8A6A22", fontStyle: "italic" } }, r.note)))))))),
+        React.createElement(PrimaryBtn, { onClick: () => onConfirm(profile), icon: ArrowRight }, "Confirm & continue")));
+}
+function AuthFlow({ onDone }) {
+    const [step, setStep] = useState("register"); // register | otp | confirm
+    const [form, setForm] = useState(null);
+    const [record, setRecord] = useState(null);
+    return (React.createElement("div", { className: "scroll", style: { flex: 1, overflowY: "auto", paddingTop: 36 } },
+        React.createElement(BrandPanel, null),
+        React.createElement("div", { style: { padding: "0 18px 28px", marginTop: -20 } },
+            React.createElement("div", { style: { background: C.cream, border: `1px solid ${C.line}`, borderRadius: 20, padding: 20, boxShadow: "0 20px 40px -28px rgba(14,43,77,0.5)" } },
+                React.createElement("div", { style: { position: "relative", display: "flex", background: C.paper, border: `1px solid ${C.line}`, borderRadius: 12, padding: 4, marginBottom: 20 } },
+                    React.createElement("div", { style: { flex: 1, textAlign: "center", padding: "10px 0", fontFamily: FONT.b, fontSize: 13.5, fontWeight: 600, color: "rgba(94,107,121,0.55)" } }, "Sign in"),
+                    React.createElement("div", { style: { flex: 1, textAlign: "center", padding: "10px 0", borderRadius: 9, background: "linear-gradient(160deg,#173E69,#0E2B4D)", color: C.cream, fontFamily: FONT.b, fontSize: 13.5, fontWeight: 600 } }, "Register")),
+                step === "register" && React.createElement(RegisterStep, { onNext: (f, rec) => { setForm(f); setRecord(rec); setStep("otp"); } }),
+                step === "otp" && React.createElement(OtpStep, { form: form, onBack: () => setStep("register"), onVerified: () => setStep("confirm") }),
+                step === "confirm" && React.createElement(ConfirmStep, { form: form, record: record, onBack: () => setStep("otp"), onConfirm: onDone })),
+            step === "register" && (React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", gap: 7, marginTop: 16 } },
+                React.createElement(ShieldCheck, { size: 13, color: C.muted }),
+                React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 11.5, color: C.muted } }, "Members-only portal \u00B7 verified access"))))));
+}
+/* ============================ MAIN APP ============================= */
+function MembershipCard({ me }) {
+    return (React.createElement("div", { style: { position: "relative", borderRadius: 18, padding: 5, background: "linear-gradient(160deg,#173E69 0%,#0E2B4D 58%,#0A2243 100%)", boxShadow: "0 18px 38px -18px rgba(14,43,77,0.65)", overflow: "hidden" } },
+        React.createElement("div", { style: { position: "absolute", inset: 0, pointerEvents: "none", backgroundImage: "repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0 1.5px,transparent 1.5px 9px)" } }),
+        React.createElement("div", { style: { position: "absolute", right: -10, bottom: -18, fontFamily: FONT.d, fontSize: 86, color: "rgba(255,255,255,0.05)", lineHeight: 1, pointerEvents: "none" } }, "KG"),
+        React.createElement("div", { style: { position: "relative", borderRadius: 14, border: "1px solid rgba(255,255,255,0.22)", boxShadow: "inset 0 0 0 4px rgba(14,43,77,0.9), inset 0 0 0 5px rgba(255,255,255,0.12)", padding: "16px 16px 14px" } },
+            React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start" } },
+                React.createElement("div", null,
+                    React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 19, color: C.cream, letterSpacing: ".04em" } }, "KGMOA"),
+                    React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 8.5, letterSpacing: ".18em", color: "rgba(238,241,245,0.6)", marginTop: 2 } }, "MEMBERSHIP \u00B7 ESTD 1965")),
+                React.createElement(Seal, { size: 34 })),
+            React.createElement("div", { style: { display: "flex", gap: 14, alignItems: "center", marginTop: 18 } },
+                React.createElement(Avatar, { name: me.name, size: 52, gold: true }),
+                React.createElement("div", { style: { minWidth: 0 } },
+                    React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 19, color: C.cream, lineHeight: 1.1 } }, me.name),
+                    React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12.5, color: "rgba(244,238,225,0.72)", marginTop: 3 } },
+                        me.rank,
+                        " \u00B7 ",
+                        me.institution))),
+            React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 18, paddingTop: 13, borderTop: "1px solid rgba(255,255,255,0.16)" } },
+                React.createElement("div", null,
+                    React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 8.5, letterSpacing: ".16em", color: "rgba(244,238,225,0.5)" } }, "PEN"),
+                    React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 13, color: "rgba(238,241,245,0.9)", marginTop: 3, letterSpacing: ".02em" } }, me.pen)),
+                React.createElement("div", { style: { textAlign: "right" } },
+                    React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 8.5, letterSpacing: ".16em", color: "rgba(244,238,225,0.5)" } }, "VALID THROUGH"),
+                    React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 6, justifyContent: "flex-end", marginTop: 3 } },
+                        React.createElement("span", { style: { width: 6, height: 6, borderRadius: "50%", background: "#5FC08A", boxShadow: "0 0 0 3px rgba(95,192,138,0.18)" } }),
+                        React.createElement("span", { style: { fontFamily: FONT.m, fontSize: 13, color: C.cream } }, "Mar 2027")))))));
+}
+function UpdateRow({ u }) {
+    const c = TYPE_COLOR[u.type];
+    return (React.createElement("div", { className: "lift", style: { borderRadius: 14, padding: "13px 15px", background: C.paper, border: `1px solid ${C.line}`, display: "flex", gap: 12, alignItems: "flex-start" } },
+        React.createElement("div", { style: { flex: 1, minWidth: 0 } },
+            React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 6 } },
+                React.createElement("span", { style: { fontFamily: FONT.m, fontSize: 9.5, letterSpacing: ".08em", textTransform: "uppercase", color: c.fg, background: c.bg, padding: "3px 8px", borderRadius: 100 } }, u.type),
+                u.unread && React.createElement("span", { style: { width: 6, height: 6, borderRadius: "50%", background: C.acc } })),
+            React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 14, fontWeight: 600, color: C.ink, lineHeight: 1.3 } }, u.title),
+            React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 11, color: C.muted, marginTop: 5 } },
+                u.date,
+                " \u00B7 ",
+                u.meta)),
+        React.createElement(ChevronRight, { size: 17, color: C.muted, style: { marginTop: 2, flexShrink: 0 } })));
+}
+function SectionHead({ title, action, onAction }) {
+    return (React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 18px 12px" } },
+        React.createElement(Label, { color: C.navySoft }, title),
+        action && (React.createElement("button", { onClick: onAction, style: { background: "none", border: "none", display: "flex", alignItems: "center", gap: 3, cursor: "pointer" } },
+            React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 12, color: C.navySoft, fontWeight: 600 } }, action),
+            React.createElement(ArrowUpRight, { size: 13, color: C.navySoft })))));
+}
+function HomeScreen({ me, go }) {
+    const quick = [
+        { icon: FileText, label: "Circulars", to: "updates" },
+        { icon: Users, label: "Directory", to: "directory" },
+        { icon: Calendar, label: "Events", to: "updates" },
+    ];
+    return (React.createElement("div", { className: "fade" },
+        React.createElement("div", { style: { background: "linear-gradient(165deg,#173E69,#0E2B4D)", padding: "20px 20px 56px", borderBottomLeftRadius: 26, borderBottomRightRadius: 26, position: "relative" } },
+            React.createElement("div", { style: { position: "absolute", top: 0, left: 20, right: 20, height: 1, background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.32),transparent)" } }),
+            React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" } },
+                React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 11 } },
+                    React.createElement(Seal, { size: 40 }),
+                    React.createElement("div", null,
+                        React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 20, color: C.cream, letterSpacing: ".14em", lineHeight: 1 } }, "KGMOA"),
+                        React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 8, letterSpacing: ".1em", color: "rgba(238,241,245,0.6)", marginTop: 4 } }, "MEMBER PORTAL"))),
+                React.createElement("button", { className: "ghost", "aria-label": "Notifications", style: { position: "relative", width: 38, height: 38, borderRadius: 11, border: "1px solid rgba(255,255,255,0.18)", background: "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" } },
+                    React.createElement(Bell, { size: 18, color: C.cream }),
+                    React.createElement("span", { style: { position: "absolute", top: 7, right: 7, width: 7, height: 7, borderRadius: "50%", background: C.red, border: "1.5px solid #0E2B4D" } }))),
+            React.createElement("div", { style: { marginTop: 20 } },
+                React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 10.5, letterSpacing: ".14em", color: "rgba(238,241,245,0.68)" } }, "\u0D28\u0D2E\u0D38\u0D4D\u0D15\u0D3E\u0D30\u0D02 \u00B7 WELCOME"),
+                React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 23, color: C.cream, marginTop: 5 } }, me.name),
+                React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12.5, color: "rgba(244,238,225,0.6)", marginTop: 2 } }, me.rank))),
+        React.createElement("div", { style: { padding: "0 18px", marginTop: -38 } },
+            React.createElement(MembershipCard, { me: me })),
+        React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, padding: "18px 18px 4px" } }, quick.map((q) => (React.createElement("button", { key: q.label, className: "lift", onClick: () => go(q.to), style: { display: "flex", flexDirection: "column", alignItems: "center", gap: 7, padding: "12px 4px", borderRadius: 14, background: C.paper, border: `1px solid ${C.line}`, cursor: "pointer" } },
+            React.createElement("div", { style: { width: 38, height: 38, borderRadius: 11, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(14,43,77,0.05)", border: `1px solid ${C.line}` } },
+                React.createElement(q.icon, { size: 17, color: C.navySoft })),
+            React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 11.5, color: C.ink, fontWeight: 600 } }, q.label))))),
+        React.createElement(SectionHead, { title: "Latest updates", action: "View all", onAction: () => go("updates") }),
+        React.createElement("div", { style: { padding: "0 18px", display: "flex", flexDirection: "column", gap: 10 } }, UPDATES.slice(0, 2).map((u, i) => React.createElement(UpdateRow, { key: i, u: u }))),
+        React.createElement(SectionHead, { title: "Upcoming" }),
+        React.createElement("div", { style: { padding: "0 18px 22px" } },
+            React.createElement("div", { className: "lift", style: { borderRadius: 16, padding: 16, background: C.paper, border: `1px solid ${C.line}`, display: "flex", gap: 14, alignItems: "center" } },
+                React.createElement("div", { style: { width: 52, height: 56, borderRadius: 12, flexShrink: 0, background: "linear-gradient(160deg,#173E69,#0E2B4D)", color: C.cream, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" } },
+                    React.createElement("span", { style: { fontFamily: FONT.m, fontSize: 9, letterSpacing: ".12em", color: "rgba(238,241,245,0.7)" } }, "AUG"),
+                    React.createElement("span", { style: { fontFamily: FONT.d, fontSize: 22, lineHeight: 1 } }, "02")),
+                React.createElement("div", { style: { minWidth: 0 } },
+                    React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 16, color: C.ink } }, "Annual Conference 2026"),
+                    React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12, color: C.muted, marginTop: 3, display: "flex", alignItems: "center", gap: 5 } },
+                        React.createElement(MapPin, { size: 12 }),
+                        " Venue to be announced \u00B7 02 Aug")),
+                React.createElement(ChevronRight, { size: 18, color: C.muted, style: { marginLeft: "auto", flexShrink: 0 } })))));
+}
+function ScreenTitle({ title, sub }) {
+    return (React.createElement("div", { style: { padding: "22px 20px 14px" } },
+        React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 27, color: C.ink } }, title),
+        sub && React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12.5, color: C.muted, marginTop: 2 } }, sub)));
+}
+function UpdatesScreen() {
+    const [filter, setFilter] = useState("All");
+    const tabs = ["All", "Circular", "Event", "Welfare"];
+    const list = filter === "All" ? UPDATES : UPDATES.filter((u) => u.type === filter);
+    return (React.createElement("div", { className: "fade" },
+        React.createElement(ScreenTitle, { title: "Updates", sub: "Circulars, events & welfare notices" }),
+        React.createElement("div", { className: "noscroll", style: { display: "flex", gap: 8, padding: "0 18px 14px", overflowX: "auto" } }, tabs.map((t) => (React.createElement("button", { key: t, onClick: () => setFilter(t), style: chip(filter === t) }, t === "All" ? "All" : t + "s")))),
+        React.createElement("div", { style: { padding: "0 18px 22px", display: "flex", flexDirection: "column", gap: 10 } }, list.map((u, i) => React.createElement(UpdateRow, { key: i, u: u })))));
+}
+function DirectoryScreen({ openMember }) {
+    const [q, setQ] = useState("");
+    const list = DOCTORS.filter((m) => (m.name + m.rank + m.institution).toLowerCase().includes(q.toLowerCase()));
+    return (React.createElement("div", { className: "fade" },
+        React.createElement(ScreenTitle, { title: "Directory", sub: `${DOCTORS.length} members` }),
+        React.createElement("div", { style: { padding: "0 18px" } },
+            React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 9, background: C.paper, border: `1px solid ${C.line}`, borderRadius: 12, padding: "10px 13px" } },
+                React.createElement(Search, { size: 16, color: C.muted }),
+                React.createElement("input", { value: q, onChange: (e) => setQ(e.target.value), placeholder: "Search name, rank, institution", style: { border: "none", outline: "none", background: "transparent", flex: 1, fontFamily: FONT.b, fontSize: 13.5, color: C.ink } }))),
+        React.createElement("div", { style: { padding: "10px 18px 22px", display: "flex", flexDirection: "column" } },
+            list.map((m, i) => (React.createElement("button", { key: m.pen, className: "row", onClick: () => openMember(m), style: { display: "flex", alignItems: "center", gap: 13, padding: "12px 4px", borderBottom: i === list.length - 1 ? "none" : `1px solid ${C.line}`, background: "transparent", textAlign: "left", width: "100%" } },
+                React.createElement(Avatar, { name: m.name, size: 42 }),
+                React.createElement("div", { style: { minWidth: 0, flex: 1 } },
+                    React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 14.5, fontWeight: 600, color: C.ink } }, m.name),
+                    React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 12, color: C.muted, marginTop: 1 } },
+                        m.rank,
+                        " \u00B7 ",
+                        m.institution)),
+                React.createElement(ChevronRight, { size: 17, color: C.muted })))),
+            list.length === 0 && React.createElement("div", { style: { textAlign: "center", padding: "40px 0", fontFamily: FONT.b, color: C.muted, fontSize: 13.5 } }, "No members match that search."))));
+}
+function Detail({ title, rows }) {
+    return (React.createElement(React.Fragment, null,
+        React.createElement("div", { style: { padding: "18px 18px 0" } },
+            React.createElement(Label, null, title)),
+        React.createElement("div", { style: { padding: "10px 18px 0", display: "flex", flexDirection: "column" } }, rows.map((r, i) => (React.createElement("div", { key: r.k, style: { display: "flex", gap: 13, padding: "12px 2px", alignItems: "flex-start", borderBottom: i === rows.length - 1 ? "none" : `1px solid ${C.line}` } },
+            React.createElement(r.icon, { size: 16, color: C.acc, style: { marginTop: 2, flexShrink: 0 } }),
+            React.createElement("div", { style: { minWidth: 0, flex: 1 } },
+                React.createElement("div", { style: { fontFamily: FONT.m, fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", color: C.muted } }, r.k),
+                React.createElement("div", { style: { fontFamily: r.mono ? FONT.m : FONT.b, fontSize: 14, color: C.ink, marginTop: 2 } }, r.v),
+                r.note && (React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 5, marginTop: 5 } },
+                    React.createElement(Info, { size: 11, color: "#8A6A22" }),
+                    React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 11, color: "#8A6A22", fontStyle: "italic" } }, r.note))))))))));
+}
+function ProfileView({ m, self }) {
+    const spec = m.speciality && m.speciality !== "—" ? m.speciality : "Not on record";
+    return (React.createElement("div", { className: "fade" },
+        React.createElement("div", { style: { background: "linear-gradient(165deg,#173E69,#0E2B4D)", padding: "26px 20px 30px", borderBottomLeftRadius: 26, borderBottomRightRadius: 26, position: "relative", textAlign: "center" } },
+            React.createElement("div", { style: { position: "absolute", top: 0, left: 20, right: 20, height: 1, background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.32),transparent)" } }),
+            React.createElement("div", { style: { display: "flex", justifyContent: "center", marginBottom: 12 } },
+                React.createElement(Avatar, { name: m.name, size: 76, gold: true })),
+            React.createElement("div", { style: { fontFamily: FONT.d, fontSize: 23, color: C.cream } }, m.name),
+            React.createElement("div", { style: { fontFamily: FONT.b, fontSize: 13, color: "rgba(238,241,245,0.7)", marginTop: 3 } },
+                m.rank,
+                " \u00B7 ",
+                m.institution),
+            React.createElement("div", { style: { display: "inline-flex", alignItems: "center", gap: 6, marginTop: 12, padding: "5px 12px", borderRadius: 100, border: "1px solid rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.08)" } },
+                React.createElement(BadgeCheck, { size: 13, color: C.cream }),
+                React.createElement("span", { style: { fontFamily: FONT.m, fontSize: 10.5, letterSpacing: ".1em", color: "rgba(238,241,245,0.9)" } },
+                    "PEN ",
+                    m.pen))),
+        React.createElement(Detail, { title: "Service details", rows: [
+                { icon: Stethoscope, k: "Rank", v: m.rank },
+                { icon: Building2, k: "Institution", v: m.institution, note: self ? "You can edit your institution later in Settings." : undefined },
+                { icon: Pencil, k: "Speciality", v: spec },
+                { icon: Hash, k: "PEN number", v: m.pen, mono: true },
+            ] }),
+        React.createElement(Detail, { title: "Contact", rows: [
+                { icon: Phone, k: "Phone", v: m.phone ? `+91 ${m.phone}` : "—" },
+                { icon: Mail, k: "Email", v: `${initialsOf(m.name).toLowerCase()}.${m.pen}@kgmoa.in` },
+            ] }),
+        self && (React.createElement(React.Fragment, null,
+            React.createElement("div", { style: { padding: "18px 18px 0" } },
+                React.createElement(Label, null, "Account")),
+            React.createElement("div", { style: { padding: "10px 18px 24px", display: "flex", flexDirection: "column" } }, [
+                { icon: Building2, t: "Edit institution & posting" },
+                { icon: Bell, t: "Notifications" },
+                { icon: Shield, t: "Privacy" },
+                { icon: LifeBuoy, t: "Help & support" },
+                { icon: LogOut, t: "Sign out", danger: true },
+            ].map((r, i, a) => (React.createElement("button", { key: r.t, className: "row", style: { display: "flex", alignItems: "center", gap: 13, padding: "13px 2px", borderBottom: i === a.length - 1 ? "none" : `1px solid ${C.line}`, background: "transparent", width: "100%", textAlign: "left" } },
+                React.createElement(r.icon, { size: 17, color: r.danger ? C.red : C.navySoft }),
+                React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 14, color: r.danger ? C.red : C.ink, flex: 1 } }, r.t),
+                !r.danger && React.createElement(ChevronRight, { size: 16, color: C.muted }))))))),
+        !self && (React.createElement("div", { style: { padding: "14px 18px 24px", display: "flex", gap: 10 } },
+            React.createElement("a", { href: `tel:+91${m.phone}`, className: "lift", style: { ...actionBtn, background: C.navy, color: C.cream } },
+                React.createElement(Phone, { size: 15 }),
+                " Call"),
+            React.createElement("a", { href: `mailto:${initialsOf(m.name).toLowerCase()}.${m.pen}@kgmoa.in`, className: "lift", style: { ...actionBtn, background: C.paper, color: C.navy, border: `1px solid ${C.line}` } },
+                React.createElement(Mail, { size: 15 }),
+                " Message")))));
+}
+const actionBtn = { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "13px 0", borderRadius: 12, fontFamily: FONT.b, fontSize: 14, fontWeight: 600, textDecoration: "none", cursor: "pointer" };
+const chip = (active) => ({ flexShrink: 0, whiteSpace: "nowrap", padding: "7px 14px", borderRadius: 100, cursor: "pointer", fontFamily: FONT.b, fontSize: 12.5, fontWeight: 600, background: active ? C.navy : "transparent", color: active ? C.cream : C.navySoft, border: `1px solid ${active ? C.navy : C.line}` });
+function MainApp({ me }) {
+    const [tab, setTab] = useState("home");
+    const [member, setMember] = useState(null);
+    const scrollRef = useRef(null);
+    useEffect(() => { if (scrollRef.current)
+        scrollRef.current.scrollTop = 0; }, [tab, member]);
+    const NAV = [
+        { id: "home", icon: Home, label: "Home" },
+        { id: "updates", icon: Megaphone, label: "Updates" },
+        { id: "directory", icon: Users, label: "Directory" },
+        { id: "profile", icon: User, label: "Profile" },
+    ];
+    return (React.createElement(React.Fragment, null,
+        React.createElement("div", { ref: scrollRef, className: "scroll", style: { flex: 1, overflowY: "auto", paddingTop: 36 } }, member ? (React.createElement("div", { className: "sheet" },
+            React.createElement("button", { onClick: () => setMember(null), className: "ghost", style: { position: "absolute", top: 42, left: 14, zIndex: 6, width: 34, height: 34, borderRadius: 10, border: "1px solid rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" } },
+                React.createElement(ChevronLeft, { size: 19, color: C.cream })),
+            React.createElement(ProfileView, { m: member, self: false }))) : (React.createElement(React.Fragment, null,
+            tab === "home" && React.createElement(HomeScreen, { me: me, go: setTab }),
+            tab === "updates" && React.createElement(UpdatesScreen, null),
+            tab === "directory" && React.createElement(DirectoryScreen, { openMember: setMember }),
+            tab === "profile" && React.createElement(ProfileView, { m: me, self: true })))),
+        React.createElement("div", { style: { flexShrink: 0, background: C.paper, borderTop: `1px solid ${C.line}`, paddingBottom: 6 } },
+            React.createElement("div", { style: { height: 1, background: "linear-gradient(90deg,transparent,rgba(14,43,77,0.18),transparent)" } }),
+            React.createElement("div", { style: { display: "flex", padding: "9px 8px 4px" } }, NAV.map((n) => {
+                const active = tab === n.id && !member;
+                return (React.createElement("button", { key: n.id, onClick: () => { setMember(null); setTab(n.id); }, style: { flex: 1, background: "none", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, padding: "4px 0" } },
+                    React.createElement(n.icon, { size: 21, color: active ? C.navy : C.muted, strokeWidth: active ? 2.4 : 1.8 }),
+                    React.createElement("span", { style: { fontFamily: FONT.b, fontSize: 10, fontWeight: active ? 700 : 500, color: active ? C.navy : C.muted } }, n.label),
+                    React.createElement("span", { style: { width: 4, height: 4, borderRadius: "50%", background: active ? C.acc : "transparent" } })));
+            })))));
+}
+/* ============================== SHELL ============================== */
+function App() {
+    const [me, setMe] = useState(null); // null until auth completes
+    return (React.createElement("div", { style: { height: "100vh", width: "100%", background: C.cream, display: "flex", justifyContent: "center", overflow: "hidden" } },
+        React.createElement("style", null, `
+        @import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Hanken+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; }
+        .fade { animation: fade .3s ease both; } @keyframes fade { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:none;} }
+        .sheet { animation: slideUp .3s cubic-bezier(.2,.8,.2,1) both; } @keyframes slideUp { from{transform:translateY(100%);} to{transform:none;} }
+        .lift { transition: transform .15s ease; } .lift:active { transform: scale(.985); }
+        .row { transition: opacity .15s ease; cursor: pointer; } .row:active { opacity: .55; }
+        .ghost { transition: background .15s ease; } .ghost:active { background: rgba(255,255,255,.14); }
+        .field:focus-within { border-color: ${C.acc} !important; box-shadow: 0 0 0 3px rgba(194,161,77,0.16); }
+        .scroll::-webkit-scrollbar { width: 0; } .scroll { scrollbar-width: none; }
+        .noscroll::-webkit-scrollbar { display: none; } .noscroll { scrollbar-width: none; }
+        input::placeholder { color: #9AA6B2; }
+        button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid ${C.acc}; outline-offset: 2px; border-radius: 8px; }
+        @media (prefers-reduced-motion: reduce){ .fade,.sheet,.lift,.row,.ghost{ animation:none!important; transition:none!important;} }
+      `),
+        React.createElement("div", { style: { width: "100%", maxWidth: 480, height: "100%", background: C.cream, position: "relative", overflow: "hidden", display: "flex", flexDirection: "column" } },
+            React.createElement("div", { style: { height: 36, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 22px", position: "absolute", top: 0, left: 0, right: 0, zIndex: 5 } },
+                React.createElement("span", { style: { fontFamily: FONT.b, fontWeight: 700, fontSize: 13, color: C.cream } }, "8:20"),
+                React.createElement("span", { style: { fontFamily: FONT.m, fontSize: 11, color: C.cream } }, "5G \u25BE 84%")),
+            me ? React.createElement(MainApp, { me: me }) : React.createElement(AuthFlow, { onDone: setMe }))));
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(App));
+  </script>
 </body>
 </html>
